@@ -15,4 +15,3 @@ A list of key technologies used in this project would be as follows:
 - React
 - MongoDB
 - ExpressJS
-- Canvas
