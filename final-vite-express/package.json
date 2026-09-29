@@ -1,0 +1,25 @@
+{
+  "name": "final-vite-express",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server/main.js -w src/server",
+    "start": "cross-env NODE_ENV=production node src/server/main.js",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react-dom": "^19.1.0",
+    "react": "^19.1.0",
+    "vite-express": "*",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "nodemon": "^3.1.10",
+    "vite": "^6.3.3"
+  }
+}
