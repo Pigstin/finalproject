@@ -20,6 +20,7 @@ export default function HostLobby() {
         const response = await (await fetch('/refresh')).json()
         console.log(response)
         setGuestRole(response.other_role)
+        setGuestUsername(response.other_user)
 
         timer = setTimeout(() => { refresh() }, refreshMsec)
     }
@@ -32,14 +33,46 @@ export default function HostLobby() {
             </main>
         )
     }
-    else if (guestRole === 'waiting') {
+    else if (guestRole === 'waiting' && myRole === 'host') {
         return (
             <main>
                 <h1>{GuestUsername} Joined!</h1>
                 <h2>Select your player role. {GuestUsername} will be assigned the other role.</h2>
-                <button>Analog</button>
-                <button>Digital</button>
+                <button onClick={() => { decideRole('analog') }}>Analog</button>
+                <button onClick={() => { decideRole('digital') }}>Digital</button>
             </main>
         )
     }
+    else if (myRole === 'analog') {
+        return (
+            <main>
+                <h1>You will play as the analog character!</h1>
+                <button>Start</button>
+            </main>
+        )
+    }
+    else if (myRole === 'digital') {
+        return (
+            <main>
+                <h1>You will play as the digital character!</h1>
+                <button>Start</button>
+            </main>
+        )
+    }
+    // TODO: Handle if the other role is 'analog' or 'digital'
+
+    async function decideRole(chosen_role) {
+        const body = JSON.stringify({ "chosen_role": chosen_role })
+        const response = await fetch("/lobby/assign", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body
+        })
+
+        if (response.ok)
+            console.log('ready to start')
+        setMyRole(chosen_role)
+    }
+
+
 }
