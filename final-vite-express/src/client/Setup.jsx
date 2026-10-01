@@ -33,7 +33,7 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/create'}>
+                <form action={'lobby/create'} method="post">
                     <input name="username" type="text"></input>
                     <output>Enter Username</output>
                     <button type="submit" >Start Game!</button>
@@ -50,7 +50,7 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/join'}>
+                <form action={'lobby/join'} method="post">
                     <input name="username" type="text"></input>
                     <output>Username</output>
 

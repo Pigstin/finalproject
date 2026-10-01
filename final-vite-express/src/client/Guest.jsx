@@ -4,8 +4,8 @@ export default function GuestLobby() {
     const [myUsername, setMyUsername] = useState('')
     const [myRole, setMyRole] = useState('host')
     const [joinCode, setJoinCode] = useState('1234')
-    const [GuestUsername, setGuestUsername] = useState('GUEST')
-    const [guestRole, setGuestRole] = useState('none')
+    const [hostUsername, setHostUsername] = useState('GUEST')
+    const [hostRole, setHostRole] = useState('none')
     let timer;
     const refreshMsec = 3000
 
@@ -19,7 +19,7 @@ export default function GuestLobby() {
 
         const response = await (await fetch('/refresh')).json()
         console.log(response)
-        setGuestRole(response.other_role)
+        setHostRole(response.other_role)
 
         timer = setTimeout(() => { refresh() }, refreshMsec)
     }
