@@ -4,11 +4,6 @@ export default function SetupPage() {
     const [myRole, setMyRole] = useState('none')
     const [myUsername, setMyUsername] = useState('')
 
-    function bruh() {
-        setMyRole('AlmostHost')
-        console.log(myRole)
-    }
-
     function FirstPage() {
         return (
             <div hidden={myRole !== 'none'}>
@@ -33,6 +28,11 @@ export default function SetupPage() {
 
         return (
             <div hidden={myRole !== 'AlmostHost'} >
+                <header>
+                    <nav>
+                        <button onClick={() => setMyRole('none')}>Back</button>
+                    </nav>
+                </header>
                 <form action={'lobby/create'}>
                     <input name="username" type="text"></input>
                     <output>Enter Username</output>
@@ -45,6 +45,11 @@ export default function SetupPage() {
     function GuestUsernameEntry() {
         return (
             <div hidden={myRole !== 'AlmostGuest'} >
+                <header>
+                    <nav>
+                        <button onClick={() => setMyRole('none')}>Back</button>
+                    </nav>
+                </header>
                 <form action={'lobby/join'}>
                     <input name="username" type="text"></input>
                     <output>Username</output>
