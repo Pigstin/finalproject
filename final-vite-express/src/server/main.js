@@ -35,7 +35,6 @@ app.use("/lobby/create", express.urlencoded(), (req, res) => {
   mock_data.host_user = req.body.username
   mock_data.host_role = 'host'
   req.session.username = req.body.username
-  req.session.role = 'host'
   req.session.game_id = mock_data.game_id
 
   console.log(mock_data)
@@ -46,10 +45,11 @@ app.use("/lobby/create", express.urlencoded(), (req, res) => {
 app.use("/lobby/join", express.urlencoded(), (req, res) => {
   //TODO: Actually modify database object
   console.log(req.body)
+
+  //TODO: Make sure the guest username does not equal host username
   mock_data.guest_user = req.body.username
   mock_data.guest_role = 'waiting'
   req.session.username = req.body.username
-  req.session.role = 'waiting'
   req.session.game_id = mock_data.game_id
 
   console.log(mock_data)
@@ -60,7 +60,6 @@ app.use("/lobby/join", express.urlencoded(), (req, res) => {
 app.use("/lobby/assign", express.json(), (req, res, next) => {
   console.log(req.body)
   mock_data.host_role = req.body.chosen_role
-  req.session.host_user = req.body.chosen_role // This is a mistake I believe...
   mock_data.guest_role = (req.body.chosen_role === 'analog' ? 'digital' : 'analog')
 
   console.log(mock_data)
@@ -77,20 +76,25 @@ app.get('/refresh', (req, res, next) => {
   // Elif role = guest, other_role = database.host_role
 
   let mockResponse = {
+    my_user: 'none',
+    my_role: 'none',
     other_user: 'none',
     other_role: 'none'
   }
 
-  if (req.session.role === 'host') {
+  if (req.session.username === mock_data.host_user) {
+    mockResponse.my_user = req.session.username
+    mockResponse.my_role = mock_data.host_role
     mockResponse.other_role = mock_data.guest_role
     mockResponse.other_user = mock_data.guest_user
   }
-  else if (req.session.role === 'waiting') {
+  else if (req.session.username === mock_data.guest_user) {
+    mockResponse.my_user = req.session.username
+    mockResponse.my_role = mock_data.guest_role
     mockResponse.other_role = mock_data.host_role
     mockResponse.other_user = mock_data.host_user
     // NOTE: Guest's role is NOT UPDATED IN COOKIE before the game would start...
   }
-  // TODO: Handle if the session role cookie is 'analog' or 'digital'
 
   res.setHeader('OK', 200)
   res.end(JSON.stringify(mockResponse))
