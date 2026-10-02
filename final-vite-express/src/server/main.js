@@ -2,15 +2,11 @@ import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
 
+import {GameData, User, Role} from "./classes.mjs"
+
 const app = express();
 
-let mock_data = {
-  game_id: 1738,
-  host_user: 'none',
-  host_role: 'none',
-  guest_user: 'none',
-  guest_role: 'none'
-}
+let mock_data = new GameData()
 
 app.use(cookieSession({
   name: "session",
@@ -32,10 +28,13 @@ app.use("/teststatic", (req, res) => {
 
 app.use("/lobby/create", express.urlencoded(), (req, res) => {
   //TODO: Actually create a database object
-  mock_data.host_user = req.body.username
-  mock_data.host_role = 'host'
-  req.session.username = req.body.username
-  req.session.game_id = mock_data.game_id
+  console.log(req.body)
+  console.log(mock_data)
+  
+  mock_data.host.user = req.body.username
+  mock_data.host.role = Role.HOST
+
+  req.session = mock_data.host.getData()
 
   console.log(mock_data)
   console.log(req.session)
@@ -46,11 +45,10 @@ app.use("/lobby/join", express.urlencoded(), (req, res) => {
   //TODO: Actually modify database object
   console.log(req.body)
 
-  //TODO: Make sure the guest username does not equal host username
-  mock_data.guest_user = req.body.username
-  mock_data.guest_role = 'waiting'
-  req.session.username = req.body.username
-  req.session.game_id = mock_data.game_id
+  mock_data.guest.user = req.body.username
+  mock_data.guest.role = Role.WAITING
+
+  req.session = mock_data.guest.getData()
 
   console.log(mock_data)
   console.log(req.session)
@@ -60,7 +58,7 @@ app.use("/lobby/join", express.urlencoded(), (req, res) => {
 app.use("/lobby/assign", express.json(), (req, res, next) => {
   console.log(req.body)
   mock_data.host_role = req.body.chosen_role
-  mock_data.guest_role = (req.body.chosen_role === 'analog' ? 'digital' : 'analog')
+  mock_data.guest_role = (req.body.chosen_role === Role.ANALOG ? Role.DIGITAL : Role.ANALOG)
 
   console.log(mock_data)
 
@@ -84,15 +82,15 @@ app.get('/refresh', (req, res, next) => {
 
   if (req.session.username === mock_data.host_user) {
     mockResponse.my_user = req.session.username
-    mockResponse.my_role = mock_data.host_role
-    mockResponse.other_role = mock_data.guest_role
-    mockResponse.other_user = mock_data.guest_user
+    mockResponse.my_role = mock_data.host.role
+    mockResponse.other_role = mock_data.guest.role
+    mockResponse.other_user = mock_data.guest.user
   }
   else if (req.session.username === mock_data.guest_user) {
     mockResponse.my_user = req.session.username
-    mockResponse.my_role = mock_data.guest_role
-    mockResponse.other_role = mock_data.host_role
-    mockResponse.other_user = mock_data.host_user
+    mockResponse.my_role = mock_data.guest.role
+    mockResponse.other_role = mock_data.host.role
+    mockResponse.other_user = mock_data.host.user
     // NOTE: Guest's role is NOT UPDATED IN COOKIE before the game would start...
   }
 
@@ -102,13 +100,7 @@ app.get('/refresh', (req, res, next) => {
 
 app.use('/clear', (req, res) => {
   req.session = null
-  mock_data = {
-    game_id: 1738,
-    host_user: 'none',
-    host_role: 'none',
-    guest_user: 'none',
-    guest_role: 'none'
-  }
+  mock_data = new GameData()
   res.redirect('/')
 })
 
