@@ -34,7 +34,7 @@ export function DialInput({ minVal, maxVal, valueModifier }) {
     return (
         <div style={{ 'width': '100px', 'height': '100px' }}>
             <img src="src/client/assets/Dial.svg" style={dialStyle}></img>
-            <input type="range" min={0} max={100} style={sliderStyle} onChange={newValue}></input>
+            <input type="range" min={0} max={100} step={5} style={sliderStyle} onChange={newValue}></input>
         </div>
     )
 }
