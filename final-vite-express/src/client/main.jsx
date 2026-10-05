@@ -9,6 +9,7 @@ import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
 import GuestLobby from "./Guest";
 import { DialInput, DialSample } from "./Dial";
+import CharlotteTestZone from "./CharlotteTestZone";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/dial',
     element: <DialSample />
+  },
+  {
+    path: '/charlotteTest',
+    element: <CharlotteTestZone />
   }
 
 ])
