@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express()
+app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
 // check for sanity
@@ -23,9 +24,10 @@ const client = new MongoClient( uri )
     // player connection endpoints 
 
     app.post("/lobby/create", async (req, res) => {
+        console.log(req.body)
         if(lobbies != null) {
             const json = {
-                host_name: "user1",
+                host_name: req.body.username,
                 host_role: "host",
                 guest_name: null,
                 guest_role: null,
