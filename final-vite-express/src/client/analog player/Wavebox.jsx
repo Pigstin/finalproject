@@ -59,13 +59,6 @@ export default function WaveBox() {
                 <DialInput valueModifier={set_cAmp} minVal={-2} maxVal={2} />
                 <DialInput valueModifier={set_cPhase} minVal={-180} maxVal={180} />
             </div>
-            <button onClick={() => {
-                console.log(waveFunc(0))
-                console.log(wavefunc(90))
-                console.log(waveFunc(180))
-                console.log(waveFunc(360))
-                console.log(waveFunc(76))
-            }}>Test</button>
         </article>
     )
 }
