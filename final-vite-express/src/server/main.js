@@ -11,9 +11,10 @@ const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env
 // check for sanity
 console.log( 'uri:', uri )
 const client = new MongoClient( uri )
+await client.connect()
 
-let collection = null
-
+let lobbies = await client.db("webware-final").collection("lobbies")
+let games = await client.db("webware-final").collection("games")
 
 app.use(express.static('public'))
 
@@ -24,27 +25,23 @@ app.post("/lobby/create", async (req, res) => {
         username
     } = props.req.body;
 
-    try {
-        const newLobby = await prisma.announcements.create({
-            data: {
-
-            }
-        })
-
-        //adds job to announced_for table
-        if (job_id) {
-            await prisma.announced_for.createMany({
-                data: {
-                    announcement_id: newAnnouncement.id,
-                    job_id: job_id,
-                }
-            })
+    if(lobbies != null) {
+        const json = {
+            host_name: username,
+            host_role: "host",
+            guest_name: null,
+            guest_role: null,
+            lobby_id: 1,
+            join_code: 1234
         }
-
-        console.log(newAnnouncement);
-        props.res.status(201).json(newAnnouncement);
     }
-    catch (error: any) {
+    try {
+        const result = await lobbies.insertOne(json)
+
+        console.log(newLobby);
+        props.res.status(201).json(newLobby);
+    }
+    catch (error) {
         console.error("error creating lobby");
         console.error(error.message);
         props.res.status(500).json({ error: error.message });
