@@ -8,6 +8,7 @@ import App from "./App";
 import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
 import GuestLobby from "./Guest";
+import { DialInput, DialSample } from "./Dial";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: '/guest',
     element: <GuestLobby />
+  },
+  {
+    path: '/dial',
+    element: <DialSample />
   }
 
 ])
