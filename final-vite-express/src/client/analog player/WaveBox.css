@@ -1,0 +1,21 @@
+:root {
+    --dial-square-size: 100px;
+}
+
+article {
+    width: 600px;
+    height: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    background-color: gainsboro;
+
+}
+
+.dial-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 33% 33% 33%;
+    place-items: center;
+}
