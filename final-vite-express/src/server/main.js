@@ -1,110 +1,57 @@
 import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
+import {MongoClient, ObjectId} from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
-import {GameData, User, Role} from "./classes.mjs"
+const app = express()
 
-const app = express();
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
+// check for sanity
+console.log( 'uri:', uri )
+const client = new MongoClient( uri )
 
-let mock_data = new GameData()
+    async function run() {
+    await client.connect()
 
-app.use(cookieSession({
-  name: "session",
-  keys: ["USE_A_BETTER_KEY_THAN_THIS_DAWG"], //TODO : Use an actually good set of keys
-  maxAge: 1000 * 60 * 60 //1 hour
-}))
+    let lobbies = await client.db("webware-final").collection("lobbies")
+    let games = await client.db("webware-final").collection("games")
 
-app.get("/hello", (req, res) => {
-  res.send("Hello Vite + React!");
-});
+    app.use(express.static('public'))
 
-app.use("/test", (req, res) => {
-  res.redirect('other')
+    // player connection endpoints 
+
+    app.post("/lobby/create", async (req, res) => {
+        if(lobbies != null) {
+            const json = {
+                host_name: "user1",
+                host_role: "host",
+                guest_name: null,
+                guest_role: null,
+                lobby_id: 1,
+                join_code: 1234
+            }
+        try {
+            const result = await lobbies.insertOne(json)
+
+            console.log(result);
+            res.status(201).json(result);
+        }
+        catch (error) {
+            console.error("error creating lobby");
+            console.error(error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
 })
+}
 
-app.use("/teststatic", (req, res) => {
-  res.redirect('second.html')
-})
+// analog player endpoints 
 
-app.use("/lobby/create", express.urlencoded(), (req, res) => {
-  //TODO: Actually create a database object
-  console.log(req.body)
-  console.log(mock_data)
-  
-  mock_data.host.user = req.body.username
-  mock_data.host.role = Role.HOST
+// digital player endpoints
 
-  req.session = mock_data.host.getData()
-
-  console.log(mock_data)
-  console.log(req.session)
-  res.redirect('/host')
-})
-
-app.use("/lobby/join", express.urlencoded(), (req, res) => {
-  //TODO: Actually modify database object
-  console.log(req.body)
-
-  mock_data.guest.user = req.body.username
-  mock_data.guest.role = Role.WAITING
-
-  req.session = mock_data.guest.getData()
-
-  console.log(mock_data)
-  console.log(req.session)
-  res.redirect('/guest')
-})
-
-app.use("/lobby/assign", express.json(), (req, res, next) => {
-  console.log(req.body)
-  mock_data.host_role = req.body.chosen_role
-  mock_data.guest_role = (req.body.chosen_role === Role.ANALOG ? Role.DIGITAL : Role.ANALOG)
-
-  console.log(mock_data)
-
-  res.setHeader('OK', 200)
-  res.send()
-
-})
-
-app.get('/refresh', (req, res, next) => {
-  // TODO : Actually have this send over correct game/user data
-  // Get requesting client's role in session cookies (req.session.role)
-  // If role = host, other_role = database.guest_role
-  // Elif role = guest, other_role = database.host_role
-
-  let mockResponse = {
-    my_user: 'none',
-    my_role: 'none',
-    other_user: 'none',
-    other_role: 'none'
-  }
-
-  if (req.session.username === mock_data.host_user) {
-    mockResponse.my_user = req.session.username
-    mockResponse.my_role = mock_data.host.role
-    mockResponse.other_role = mock_data.guest.role
-    mockResponse.other_user = mock_data.guest.user
-  }
-  else if (req.session.username === mock_data.guest_user) {
-    mockResponse.my_user = req.session.username
-    mockResponse.my_role = mock_data.guest.role
-    mockResponse.other_role = mock_data.host.role
-    mockResponse.other_user = mock_data.host.user
-    // NOTE: Guest's role is NOT UPDATED IN COOKIE before the game would start...
-  }
-
-  res.setHeader('OK', 200)
-  res.end(JSON.stringify(mockResponse))
-})
-
-app.use('/clear', (req, res) => {
-  req.session = null
-  mock_data = new GameData()
-  res.redirect('/')
-})
-
-app.use(express.static('public'))
+run()
 
 ViteExpress.listen(app, 3000, () =>
   console.log("Server is listening on port 3000..."),
