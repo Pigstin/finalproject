@@ -9,9 +9,12 @@
     "build": "vite build"
   },
   "dependencies": {
+    "cookie-session": "^2.1.1",
+    "cross-env": "^7.0.3",
     "express": "^5.1.0",
-    "react-dom": "^19.1.0",
     "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^8.4.0",
     "vite-express": "*",
     "dotenv": "^17.4.2",
     "cross-env": "^7.0.3",
