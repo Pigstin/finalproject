@@ -43,21 +43,29 @@ export default function WaveBox() {
 
     const chartData = plotWave()
 
+    const waveBoxStyle = {
+        background: 'black',
+        width: "100%",
+        height: "100%",
+        border: "4px inset gray",
+        boxSizing: "border-box"
+    }
+
     return (
         <article>
-            <div style={{ background: 'black' }}>
+            <div style={waveBoxStyle}>
                 <LineChart data={chartData} style={{ width: "100%", height: "100%" }}>
                     <YAxis domain={[-2, 2]} hide />
                     <Line dot={false} stroke="#104ef8" strokeWidth={3} isAnimationActive={false} animationBegin={false} type="monotone" dataKey='y' />
                 </LineChart>
             </div>
             <div className="dial-container">
-                <DialInput valueModifier={set_aAmp} minVal={-2} maxVal={2} />
-                <DialInput valueModifier={set_aPhase} minVal={-180} maxVal={180} />
-                <DialInput valueModifier={set_bAmp} minVal={-2} maxVal={2} />
-                <DialInput valueModifier={set_bPhase} minVal={-180} maxVal={180} />
-                <DialInput valueModifier={set_cAmp} minVal={-2} maxVal={2} />
-                <DialInput valueModifier={set_cPhase} minVal={-180} maxVal={180} />
+                <DialInput initVal={1} minVal={0} maxVal={2} valueModifier={set_aAmp} />
+                <DialInput initVal={0} minVal={-180} maxVal={180} valueModifier={set_aPhase} />
+                <DialInput initVal={0} minVal={0} maxVal={2} valueModifier={set_bAmp} />
+                <DialInput initVal={0} minVal={-180} maxVal={180} valueModifier={set_bPhase} />
+                <DialInput initVal={0} minVal={0} maxVal={2} valueModifier={set_cAmp} />
+                <DialInput initVal={0} minVal={-180} maxVal={180} valueModifier={set_cPhase} />
             </div>
         </article>
     )

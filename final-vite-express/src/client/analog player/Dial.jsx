@@ -1,7 +1,9 @@
 import { useState } from "react"
+import dialSprite from "./assets/Dial.svg"
+import './Dial.css'
 
-export function DialInput({ minVal, maxVal, valueModifier }) {
-    const [value, setValue] = useState(0)
+export function DialInput({ minVal, maxVal, valueModifier, initVal }) {
+    const [value, setValue] = useState(initVal)
     const dialRadius = '75px'
     const divRadius = '120px'
 
@@ -9,7 +11,9 @@ export function DialInput({ minVal, maxVal, valueModifier }) {
         'transform': `rotate(${lerp(-45, 225, inverseLerp(minVal, maxVal, value))}deg)`,
         height: dialRadius,
         width: dialRadius,
-        position: 'absolute'
+        position: 'absolute',
+        top: '20%',
+        left: '20%'
     }
 
     const sliderStyle = {
@@ -35,13 +39,13 @@ export function DialInput({ minVal, maxVal, valueModifier }) {
     }
     return (
         <div style={{ 'width': divRadius, 'height': divRadius, position: 'relative' }}>
-            <img src="src/client/assets/Dial.svg" style={dialStyle}></img>
+            <img src={dialSprite} style={dialStyle}></img>
             {/* TODO : Put this style crap in a CSS file, and make it not so bad */}
-            <p style={{ position: 'absolute', top: '-40%', width: '100%', textAlign: 'center' }}>{lerp(minVal, maxVal, 0.5)}</p>
-            <p style={{ position: 'absolute', top: '40%', width: '100%', textAlign: 'left' }}>{minVal}</p>
-            <p style={{ position: 'absolute', top: '40%', width: '100%', textAlign: 'right' }}>{maxVal}</p>
-            <p style={{ position: 'absolute', top: '-10%', left: '-5%', width: '105%', textAlign: 'right' }}>{lerp(minVal, maxVal, 0.75)}</p>
-            <p style={{ position: 'absolute', top: '-10%', left: '-5%', width: '105%', textAlign: 'left' }}>{lerp(minVal, maxVal, 0.25)}</p>
+            <p className="pct50">{lerp(minVal, maxVal, 0.5)}</p>
+            <p className="pct0">{minVal}</p>
+            <p className="pct100">{maxVal}</p>
+            <p className="pct75">{lerp(minVal, maxVal, 0.75)}</p>
+            <p className="pct25">{lerp(minVal, maxVal, 0.25)}</p>
             <input type="range" min={0} max={100} step={5} style={sliderStyle} onChange={newValue}></input>
 
         </div>
@@ -53,7 +57,7 @@ export function DialSample() {
     const [val2, setVal2] = useState(0)
     const [val3, setVal3] = useState(0)
     return (
-        <div style={{ display: "grid", gap: '7px', gridTemplateColumns: "100px 100px 100px", gridTemplateRows: "100px 100px", placeItems: 'center' }}>
+        <div style={{ display: "grid", gap: '50px', gridTemplateColumns: "100px 100px 100px", gridTemplateRows: "100px 100px", placeItems: 'center' }}>
             <DialInput valueModifier={setVal1} minVal={-100} maxVal={100} />
             <DialInput valueModifier={setVal2} minVal={-2} maxVal={2} />
             <DialInput valueModifier={setVal3} minVal={0} maxVal={150} />

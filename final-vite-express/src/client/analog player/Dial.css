@@ -1,0 +1,44 @@
+.pct50 {
+    font-size: 10px;
+    color: black;
+    position: absolute;
+    top: -5%;
+    width: 100%;
+    text-align: center;
+}
+
+.pct0 {
+    font-size: 10px;
+    color: black;
+    position: absolute;
+    top: 65%;
+    right: 75%;
+    text-align: right;
+}
+
+.pct100 {
+    font-size: 10px;
+    color: black;
+    position: absolute;
+    top: 65%;
+    left: 75%;
+    text-align: left;
+}
+
+.pct75 {
+    font-size: 10px;
+    color: black;
+    position: absolute;
+    top: 20%;
+    left: 85%;
+    text-align: right;
+}
+
+.pct25 {
+    font-size: 10px;
+    color: black;
+    position: absolute;
+    top: 20%;
+    right: 85%;
+    text-align: left
+}
