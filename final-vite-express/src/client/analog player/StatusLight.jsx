@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./StatusLight.css"
+import styles from "./StatusLight.module.css"
 import buttonSprite from "./assets/Dial.svg"
 
 export default function StatusLightSwitch() {
@@ -20,9 +20,9 @@ export default function StatusLightSwitch() {
     }
 
     return (
-        <article>
+        <article className={styles.statusLight}>
             <div>
-                <div className="led" style={ledStyle}></div>
+                <div className={styles.led} style={ledStyle}></div>
             </div>
             <button><img src={buttonSprite} onClick={() => setColor('red')} /></button>
             <button><img src={buttonSprite} onClick={() => setColor('green')} /></button>

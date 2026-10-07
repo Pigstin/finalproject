@@ -1,0 +1,25 @@
+.mainArea {
+    padding: 20px;
+    /* display: grid;
+    grid-template-columns: auto 450px 350px; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 96%;
+    height: auto;
+    align-content: center;
+}
+
+/* @media screen and (max-width: 1470px) {
+    .mainArea {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 670px 450px;
+        grid-template-rows: auto 600px;
+        gap: 10px;
+        width: 96%;
+        height: 650px;
+        align-content: center
+    }
+} */

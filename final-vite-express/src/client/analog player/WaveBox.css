@@ -2,15 +2,15 @@
     --dial-square-size: 100px;
 }
 
-article {
+.wavebox {
     width: 600px;
     height: 350px;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 0px;
     display: grid;
     grid-template-columns: 60% 40%;
     background-color: gainsboro;
-
+    border: outset rgb(148, 148, 148) 8px
 }
 
 .dial-container {

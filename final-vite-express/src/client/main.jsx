@@ -12,6 +12,7 @@ import { DialInput, DialSample } from "./analog player/Dial";
 import WaveBox from "./analog player/Wavebox";
 import CharlotteTestZone from "./CharlotteTestZone";
 import StatusLightSwitch from "./analog player/StatusLight";
+import AnalogScreen from "./analog player/Analog";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: '/light',
     element: <StatusLightSwitch />
+  },
+  {
+    path: '/analog',
+    element: <AnalogScreen />
   }
 
 ])
