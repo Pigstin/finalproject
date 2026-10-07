@@ -12,13 +12,13 @@ const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env
 console.log( 'uri:', uri )
 const client = new MongoClient( uri )
 
-    async function run() {
+async function run() {
     await client.connect()
 
     let lobbies = await client.db("webware-final").collection("lobbies")
     let games = await client.db("webware-final").collection("games")
 
-    app.use(express.static('public'))
+    // app.use('/digital', express.static('public'))
 
     // player connection endpoints 
 
@@ -32,27 +32,30 @@ const client = new MongoClient( uri )
                 lobby_id: 1,
                 join_code: 1234
             }
-        try {
-            const result = await lobbies.insertOne(json)
+            try {
+                const result = await lobbies.insertOne(json)
 
-            console.log(result);
-            res.status(201).json(result);
+                console.log(result);
+                res.status(201).json(result);
+            } catch (error) {
+                console.error("error creating lobby");
+                console.error(error.message);
+                res.status(500).json({ error: error.message });
+            }
         }
-        catch (error) {
-            console.error("error creating lobby");
-            console.error(error.message);
-            res.status(500).json({ error: error.message });
-        }
-    }
-})
+    })
+
+    app.get('/artTest', (req, res, next)=>{
+        res.render('/public/second')
+    })
 }
 
 // analog player endpoints 
 
 // digital player endpoints
 
-run()
+run();
 
 ViteExpress.listen(app, 3000, () =>
-  console.log("Server is listening on port 3000..."),
+    console.log("Server is listening on port 3000..."),
 );
