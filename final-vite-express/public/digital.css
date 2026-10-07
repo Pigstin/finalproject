@@ -1,0 +1,16 @@
+canvas {
+    border: 1px solid black;
+    position: absolute;
+    top: 10%;
+    left: 60%;
+    width: 30%;
+    height: 30%;
+}
+
+.backgroundImage {
+    width: 100%;
+}
+
+.gameContainer {
+    position: relative;
+}
