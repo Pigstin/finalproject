@@ -1,0 +1,32 @@
+import { useState } from "react";
+import "./StatusLight.css"
+import buttonSprite from "./assets/Dial.svg"
+
+export default function StatusLightSwitch() {
+    const [color, setColor] = useState('none')
+
+    let ledStyle = (color === 'red') ? {
+        backgroundColor: 'red',
+        boxShadow: 'red 0px 0px 10px'
+    } : (color === 'blue') ? {
+        backgroundColor: 'blue',
+        boxShadow: 'blue 0px 0px 10px'
+    } : (color === 'green') ? {
+        backgroundColor: 'lime',
+        boxShadow: 'lime 0px 0px 10px'
+    } : {
+        backgroundColor: 'gray',
+        boxShadow: 'none'
+    }
+
+    return (
+        <article>
+            <div>
+                <div className="led" style={ledStyle}></div>
+            </div>
+            <button><img src={buttonSprite} onClick={() => setColor('red')} /></button>
+            <button><img src={buttonSprite} onClick={() => setColor('green')} /></button>
+            <button><img src={buttonSprite} onClick={() => setColor('blue')} /></button>
+        </article>
+    )
+}

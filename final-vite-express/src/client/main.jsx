@@ -11,6 +11,7 @@ import GuestLobby from "./Guest";
 import { DialInput, DialSample } from "./analog player/Dial";
 import WaveBox from "./analog player/Wavebox";
 import CharlotteTestZone from "./CharlotteTestZone";
+import StatusLightSwitch from "./analog player/StatusLight";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,6 @@ const router = createBrowserRouter([
   {
     path: '/dial',
     element: <DialSample />
-    //element: <DialInput minVal={-50} maxVal={50} valueModifier={() => { }} />
   },
   {
     path: '/wave',
@@ -37,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/charlotteTest',
     element: <CharlotteTestZone />
+  },
+  {
+    path: '/light',
+    element: <StatusLightSwitch />
   }
 
 ])
