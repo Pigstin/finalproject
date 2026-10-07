@@ -1,49 +1,9 @@
 import './digital.css'
 
-export default function DigitalPage() {
-    return (
-        <div className="DigitalPage">            
-        {/* add onload function and draw call */}
-        window.onload = onLoad
-
-        <div className="gameContainer">
-            <img src="images/background.png" className="backgroundImage"/>
-            <canvas id="canvas">
-                game's supposed to show up here. if you see this text, RUN. IT'S COMING.
-            </canvas>
-        </div>
-
-
-
-        <p>A*cos(1x + a) + B*cos(2x + b) + C*cos(3x + c)</p>
-        <p>Waveform settings:</p>
-        <div>
-            <input type="range" id="A" name="A" min="0" max="2" defaultValue="1" step="0.01"/>
-            <label htmlFor="A">A (1Hz amplitude)</label>
-            <input type="range" id="a" name="a" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="a">a (1Hz phase)</label>
-        </div>
-        <div>
-            <input type="range" id="B" name="B" min="0" max="2" defaultValue="0" step="0.01"/>
-            <label htmlFor="B">B (2Hz amplitude)</label>
-            <input type="range" id="b" name="b" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="b">b (2Hz phase)</label>
-        </div>
-        <div>
-            <input type="range" id="C" name="C" min="0" max="2" defaultValue="0" step="0.01"/>
-            <label htmlFor="C">C (3Hz amplitude)</label>
-            <input type="range" id="c" name="c" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="c">c (3Hz phase)</label>    
-        </div>
-        </div>
-);
-} 
-
-
 let canvas = undefined
 let ctx = undefined
 
-function onLoad() {
+function loadJS() {
     console.log("omg jabascribt")
 
     //setup htmlFor canvas
@@ -185,3 +145,42 @@ function draw(timestamp) {
     }
     requestAnimationFrame(draw)
 }
+
+
+export default function DigitalPage() {
+    return (
+        <div className="DigitalPage" onLoad={evt => {loadJS()}}>                 
+        {/* add onload function */}
+
+        <div className="gameContainer">
+            <img src="images/background.png" className="backgroundImage"/>
+            <canvas id="canvas">
+                game's supposed to show up here. if you see this text, RUN. IT'S COMING.
+            </canvas>
+        </div>
+
+
+
+        <p>A*cos(1x + a) + B*cos(2x + b) + C*cos(3x + c)</p>
+        <p>Waveform settings:</p>
+        <div>
+            <input type="range" id="A" name="A" min="0" max="2" defaultValue="1" step="0.01"/>
+            <label htmlFor="A">A (1Hz amplitude)</label>
+            <input type="range" id="a" name="a" min="-180" max="180" defaultValue="0" step="1"/>
+            <label htmlFor="a">a (1Hz phase)</label>
+        </div>
+        <div>
+            <input type="range" id="B" name="B" min="0" max="2" defaultValue="0" step="0.01"/>
+            <label htmlFor="B">B (2Hz amplitude)</label>
+            <input type="range" id="b" name="b" min="-180" max="180" defaultValue="0" step="1"/>
+            <label htmlFor="b">b (2Hz phase)</label>
+        </div>
+        <div>
+            <input type="range" id="C" name="C" min="0" max="2" defaultValue="0" step="0.01"/>
+            <label htmlFor="C">C (3Hz amplitude)</label>
+            <input type="range" id="c" name="c" min="-180" max="180" defaultValue="0" step="1"/>
+            <label htmlFor="c">c (3Hz phase)</label>    
+        </div>
+        </div>
+);
+} 
