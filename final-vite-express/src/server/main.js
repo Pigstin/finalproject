@@ -18,7 +18,7 @@ async function run() {
     let lobbies = await client.db("webware-final").collection("lobbies")
     let games = await client.db("webware-final").collection("games")
 
-    // app.use('/digital', express.static('public'))
+    app.use(express.static('public'))
 
     // player connection endpoints 
 
