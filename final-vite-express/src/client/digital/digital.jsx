@@ -1,39 +1,31 @@
 import './digital.css'
 
-let canvas = undefined
-let ctx = undefined
+let oscCanvas = undefined
+let oscCtx = undefined
 
+//this function is running 3 times!!! that is bad!!!
+//implementing a hacky stop to that
+let ranBefore = false
 function loadJS() {
-    console.log("omg jabascribt")
+    if (ranBefore === false) {
+        ranBefore = true
+        console.log("omg jabascribt")
 
-    //setup for canvas
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
-    screenWidth = canvas.width
-    screenHeight = canvas.height
-    ctx.fillStyle = "rgb(0 0 0)"
-    ctx.fillRect(0, 0, screenWidth, screenHeight)
+        //setup for oscilloscope canvas
+        oscCanvas = document.getElementById("oscCanvas");
+        oscCtx = oscCanvas.getContext("2d");
+        oscCtx.fillStyle = "rgb(0 0 0)"
+        oscCtx.fillRect(0, 0, oscCanvas.width, oscCanvas.height)
 
-    //setup the info screen to display screen 1
-    disableAllImages()
-    updateInfoScreen()
+        //setup the info screen to display screen 1
+        disableAllInfoImages()
+        updateInfoScreen()
 
-    prevTime = document.timeline.currentTime
-    requestAnimationFrame(draw)
+        prevTime = document.timeline.currentTime
+        requestAnimationFrame(draw)
+    }
 }
 
-//constants
-const scanLineSpeed = 0.5 //in Hz
-const delayBetweenDots = 80 //in ms
-const dotsMaintainedMax = 10 //the amount of most recent dots that won't fade yet
-//can be used to position the screen within the canvas. right now, just fills the whole canvas
-const screenX = 0
-const screenY = 0
-let screenWidth = undefined //defined in window.onload once we know canvas width
-let screenHeight = undefined //defined in window.onload once we know canvas height
-const dotSize = 4
-const verticalDivs = 6
-const divLineWeight = 2
 //globals that the function uses & changes
 let prevTime = undefined
 let scanWidth = undefined
@@ -53,15 +45,23 @@ let p_c = 0
 let refreshVals = {"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
 
 function draw(timestamp) {
+    //constants
+    const scanLineSpeed = 0.5 //in Hz
+    const delayBetweenDots = 80 //in ms
+    const dotsMaintainedMax = 10 //the amount of most recent dots that won't fade yet
+    const dotSize = 4
+    const verticalDivs = 6
+    const divLineWeight = 2
+
     let deltaTime = timestamp - prevTime //miliseconds that passed since last frame. usually 16.6667ms for 60hz
     prevTime = timestamp //set prevTime so that next deltaTime calculation will be accurate
 
     //sometimes, the user tabs out. this will result in a massive deltaTime value. which messes things up and is bad. 
     // so if deltaTime is abnormally large, just skip the frame! shouldn't be a problem unless the user has a 10Hz monitor or something.
     if (deltaTime < 100) { //only run the frame if it hasn't been more than 100ms
-        scanWidth = (deltaTime / 1000) * scanLineSpeed * screenWidth + 1
-        if (scanLineX > screenWidth) {
-            scanLineX -= screenWidth
+        scanWidth = (deltaTime / 1000) * scanLineSpeed * oscCanvas.width + 1
+        if (scanLineX > oscCanvas.width) {
+            scanLineX -= oscCanvas.width
             //update for (potentially) new parameters
             p_A = refreshVals["A"]
             p_a = refreshVals["a"]
@@ -73,30 +73,30 @@ function draw(timestamp) {
         }
 
         //fade previous data
-        ctx.fillStyle = "rgb(0 0 0 / 5%)";
-        ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
+        oscCtx.fillStyle = "rgb(0 0 0 / 5%)";
+        oscCtx.fillRect(0, 0, oscCanvas.width, oscCanvas.height);
 
         //scan line
-        ctx.fillStyle = "rgb(24, 248, 24)";
-        if (scanLineX + scanWidth < screenWidth) {
-            ctx.fillRect(screenX + scanLineX, screenY, scanWidth, screenHeight);
+        oscCtx.fillStyle = "rgb(24, 248, 24)";
+        if (scanLineX + scanWidth < oscCanvas.width) {
+            oscCtx.fillRect(scanLineX, 0, scanWidth, oscCanvas.height);
         } else {
-            ctx.fillRect(screenX + scanLineX, screenY, screenWidth-scanLineX, screenHeight);
-            ctx.fillRect(screenX, screenY, scanWidth-(screenWidth-scanLineX), screenHeight);
+            oscCtx.fillRect(scanLineX, 0, oscCanvas.width-scanLineX, oscCanvas.height);
+            oscCtx.fillRect(0, 0, scanWidth-(oscCanvas.width-scanLineX), oscCanvas.height);
         }
 
         //div lines
-        ctx.fillStyle = "rgb(0 66 141 / 2%)";
+        oscCtx.fillStyle = "rgb(0 66 141 / 2%)";
         //lines for 90deg, 180deg, 270deg
-        ctx.fillRect(screenX + 1/4*screenWidth - divLineWeight/2, screenY, divLineWeight, screenHeight)
-        ctx.fillRect(screenX + 2/4*screenWidth - divLineWeight, screenY, divLineWeight*2, screenHeight)
-        ctx.fillRect(screenX + 3/4*screenWidth - divLineWeight/2, screenY, divLineWeight, screenHeight)
+        oscCtx.fillRect(1/4*oscCanvas.width - divLineWeight/2, 0, divLineWeight, oscCanvas.height)
+        oscCtx.fillRect(2/4*oscCanvas.width - divLineWeight, 0, divLineWeight*2, oscCanvas.height)
+        oscCtx.fillRect(3/4*oscCanvas.width - divLineWeight/2, 0, divLineWeight, oscCanvas.height)
         //line at y=0
-        ctx.fillRect(screenX, screenY + 1/2*screenHeight - divLineWeight, screenWidth, divLineWeight*2)
+        oscCtx.fillRect(0, 1/2*oscCanvas.height - divLineWeight, oscCanvas.width, divLineWeight*2)
         //draw lines at y= +/-1, +/-2, etc. as many as there are vertical divs
         for (let i = 1; i < verticalDivs/2; i++) {
-            ctx.fillRect(screenX, screenY + 1/2*screenHeight - divLineWeight/2 + i/verticalDivs*screenHeight, screenWidth, divLineWeight)
-            ctx.fillRect(screenX, screenY + 1/2*screenHeight - divLineWeight/2 - i/verticalDivs*screenHeight, screenWidth, divLineWeight)
+            oscCtx.fillRect(0, 1/2*oscCanvas.height - divLineWeight/2 + i/verticalDivs*oscCanvas.height, oscCanvas.width, divLineWeight)
+            oscCtx.fillRect(0, 1/2*oscCanvas.height - divLineWeight/2 - i/verticalDivs*oscCanvas.height, oscCanvas.width, divLineWeight)
         }
 
         //add dots
@@ -107,14 +107,14 @@ function draw(timestamp) {
             sinceLastDot -= delayBetweenDots
 
             //make a dot
-            ctx.fillStyle = "rgb(255 255 255)";
+            oscCtx.fillStyle = "rgb(255 255 255)";
             let dotX = scanLineX - dotSize/2
-            let varX = scanLineX * (2*Math.PI)/ screenWidth //input to f(x). ranges from 0 to 2pi
+            let varX = scanLineX * (2*Math.PI)/ oscCanvas.width //input to f(x). ranges from 0 to 2pi
             let FofX = p_A*Math.cos(1*varX + p_a*(Math.PI/180)) //1st harmonic
                     + p_B*Math.cos(2*varX + p_b*(Math.PI/180)) //2nd harmonic
                     + p_C*Math.cos(3*varX + p_c*(Math.PI/180)) //3rd harmonic
             
-            let dotY = (-FofX * screenHeight / verticalDivs) + screenHeight/2 - dotSize/2
+            let dotY = (-FofX * oscCanvas.height / verticalDivs) + oscCanvas.height/2 - dotSize/2
             //add dot's x and y to list
             dotsMaintained.push({"x": dotX, "y": dotY})
             //cull list if it's over the max
@@ -123,17 +123,17 @@ function draw(timestamp) {
             }
             //display all dots
             for (const dot of dotsMaintained) {
-                ctx.fillRect(dot.x + screenX, dot.y + screenY, dotSize, dotSize);
+                oscCtx.fillRect(dot.x, dot.y, dotSize, dotSize);
             }
         }
 
-        scanLineX += (deltaTime / 1000) * scanLineSpeed * screenWidth
+        scanLineX += (deltaTime / 1000) * scanLineSpeed * oscCanvas.width
     }
     requestAnimationFrame(draw)
 }
 
 //requests new data every 1900 seconds
-//setInterval(requestData, 1900); //TODO re-enable this once everything works nicely together
+// setInterval(requestData, 1900); //TODO re-enable once endpoints exist properly
 
 async function requestData() {
 
@@ -170,20 +170,99 @@ let infoScreenIndex = 1
 function updateInfoScreen() {
     infoText = document.getElementById("infoText");
     infoText.innerText = infoScreenData[infoScreenIndex]
-    disableAllImages()
+    disableAllInfoImages()
     if (infoScreenIndex === 1) {
         document.getElementById("icon-instructions-1").style.display = "block"
     } else if (infoScreenIndex === 2) {
         document.getElementById("icon-instructions-2").style.display = "block"
-    } //TODO: add all other images
+    } else if (infoScreenIndex === 15) {
+        document.getElementById("icon-appendix-a").style.display = "block"
+    } else {
+        //time to render a function onto the canvas
+        document.getElementById("infoCanvas").style.display = "block"
+        let waveNumber = infoScreenIndex - 2
+        drawInfoWave(waveNumber)
+        if (infoScreenIndex === 3) {document.getElementById("vector-n").style.display = "block"}
+        else if (infoScreenIndex === 4) {document.getElementById("vector-e").style.display = "block"}
+        else if (infoScreenIndex === 5) {document.getElementById("vector-s").style.display = "block"}
+        else if (infoScreenIndex === 6) {document.getElementById("vector-w").style.display = "block"}
+        else if (infoScreenIndex === 7) {document.getElementById("vector-nne").style.display = "block"}
+        else if (infoScreenIndex === 8) {document.getElementById("vector-ene").style.display = "block"}
+        else if (infoScreenIndex === 9) {document.getElementById("vector-ese").style.display = "block"}
+        else if (infoScreenIndex === 10) {document.getElementById("vector-sse").style.display = "block"}
+        else if (infoScreenIndex === 11) {document.getElementById("vector-ssw").style.display = "block"}
+        else if (infoScreenIndex === 12) {document.getElementById("vector-wsw").style.display = "block"}
+        else if (infoScreenIndex === 13) {document.getElementById("vector-wnw").style.display = "block"}
+        else if (infoScreenIndex === 14) {document.getElementById("vector-nnw").style.display = "block"}
+    }
 }
 
-function disableAllImages() {
-    document.getElementById("icon-instructions-1").style.display = "none"
-    document.getElementById("icon-instructions-2").style.display = "none"
-    //TODO: add all other images
+//finds everything with the "info" class and makes it disappear
+function disableAllInfoImages() {
+    const allInfoElements = document.getElementsByClassName("info")
+    for (const infoElement of allInfoElements) {
+        infoElement.style.display = "none"
+    }
 }
 
+//ovewrites the infoCanvas element to display a waveform
+function drawInfoWave(waveNumber) {
+    const infoCanvas = document.getElementById("infoCanvas")
+    const infoCtx = infoCanvas.getContext("2d")
+
+    const divLineWeight = 2
+    const dotSize = 2
+    const verticalDivs = 6
+    const waveParams = waveData[waveNumber]
+
+    //cover previous data
+    infoCtx.fillStyle = "rgb(0 0 0)";
+    infoCtx.fillRect(0, 0, infoCanvas.width, infoCanvas.height);
+
+    //div lines
+    infoCtx.fillStyle = "rgb(0 66 141)";
+    //lines for 90deg, 180deg, 270deg
+    infoCtx.fillRect(1/4*infoCanvas.width - divLineWeight/2, 0, divLineWeight, infoCanvas.height)
+    infoCtx.fillRect(2/4*infoCanvas.width - divLineWeight, 0, divLineWeight*2, infoCanvas.height)
+    infoCtx.fillRect(3/4*infoCanvas.width - divLineWeight/2, 0, divLineWeight, infoCanvas.height)
+    //line at y=0
+    infoCtx.fillRect(0, 1/2*infoCanvas.height - divLineWeight, infoCanvas.width, divLineWeight*2)
+    //draw lines at y= +/-1, +/-2, etc. as many as there are vertical divs
+    for (let i = 1; i < verticalDivs/2; i++) {
+        infoCtx.fillRect(0, 1/2*infoCanvas.height - divLineWeight/2 + i/verticalDivs*infoCanvas.height, infoCanvas.width, divLineWeight)
+        infoCtx.fillRect(0, 1/2*infoCanvas.height - divLineWeight/2 - i/verticalDivs*infoCanvas.height, infoCanvas.width, divLineWeight)
+    }
+
+    //add enough dots to look like a smooth wave
+    infoCtx.fillStyle = "rgb(255 255 255)";
+    for (let varX = 0; varX < 2*Math.PI; varX += 0.01) {
+        
+        let FofX = waveParams["A"]*Math.cos(1*varX + waveParams["a"]*(Math.PI/180)) //1st harmonic
+                + waveParams["B"]*Math.cos(2*varX + waveParams["b"]*(Math.PI/180)) //2nd harmonic
+                + waveParams["C"]*Math.cos(3*varX + waveParams["c"]*(Math.PI/180)) //3rd harmonic
+        
+        let dotX = (varX * infoCanvas.width / (2*Math.PI)) - dotSize/2
+        let dotY = (-FofX * infoCanvas.height / verticalDivs) + infoCanvas.height/2 - dotSize/2
+        infoCtx.fillRect(dotX, dotY, dotSize, dotSize);
+    }
+}
+
+const waveData = {
+    1: {A: 0, a: 0, B: 0, b: 0, C: 0, c: 0}, //flatline
+    2: {A: 1, a: 0, B: 0, b: 0, C: 0, c: 0}, //1hz simple
+    3: {A: 0, a: 0, B: 1, b: 0, C: 0, c: 0}, //2hz simple
+    4: {A: 0, a: 0, B: 0, b: 0, C: 1, c: 0}, //3hz simple
+    5: {A: 1, a: 0, B: 1, b: -90, C: 0, c: 0}, //wobbly
+    6: {A: 2, a: -180, B: 0.5, b: 180, C: 0, c: 0}, //plateau
+    7: {A: 1, a: 0, B: 0, b: 0, C: 1, c: 180}, //central-W
+    8: {A: 1, a: 90, B: 0, b: 0, C: 0.5, c: -90}, //valley-mountain
+    9: {A: 0, a: 0, B: 1, b: 0, C: 1, c: 0}, //central-M 
+    10: {A: 0, a: 0, B: 1.5, b: 0, C: 0.5, c: -180}, //bird 
+    11: {A: 0.5, a: 0, B: 0.5, b: 0, C: 1, c: 0}, //double-W 
+    12: {A: 2, a: 90, B: 1, b: 90, C: 0.5, c: 90}, //sawtooth 
+}
+
+//160 x 160 images
 const infoScreenData = {
     1: `INSTRUCTIONS [1]\n
         This document is for the OPERATOR's\n
@@ -264,9 +343,17 @@ const infoScreenData = {
         CWN: 1(2∠90), 2(1∠90), 3(0.5∠90)
         `, 
     15:`APPENDIX [A]\n
-        describe CWN here TODO`
+        CWN (Compact Waveform Notation)\n
+        describes a waveform based on its\n
+        components. All waveforms you will\n
+        encounter match the following pattern:\n
+        A*cos(1x+a) +B*cos(2x+b) +C*cos(3x+c)\n
+        consisting of 1Hz, 2Hz, and 3Hz parts.\n
+        These can be described in Compact \n
+        Waveform Notation using less space:\n
+        1(A∠a), 2(B∠b), 3(C∠c)
+        `
 }
-
 
 export default function DigitalPage() {
     return (
@@ -275,13 +362,27 @@ export default function DigitalPage() {
 
             <div className="gameContainer">
                 <img src="images/background.png" className="backgroundImage"/>
-                <canvas id="canvas">
+                <canvas id="oscCanvas">
                     game's supposed to show up here. if you see this text, RUN. IT'S COMING.
                 </canvas>
                 
                 <p className="infoText" id="infoText"></p>
-                <img src="images/icon-instructions-1.png" className="infoImage" id="icon-instructions-1"/>
-                <img src="images/icon-instructions-2.png" className="infoImage" id="icon-instructions-2"/>
+                <img src="images/icon-instructions-1.png" className="infoImage info" id="icon-instructions-1"/>
+                <img src="images/icon-instructions-2.png" className="infoImage info" id="icon-instructions-2"/>
+                <canvas className="infoImage info" id="infoCanvas"/>
+                <img src="images/icon-appendix-a.png" className="infoImage info" id="icon-appendix-a"/>
+                <img src="images/vector-n.png" className="infoVector info" id="vector-n"/>
+                <img src="images/vector-e.png" className="infoVector info" id="vector-e"/>
+                <img src="images/vector-s.png" className="infoVector info" id="vector-s"/>
+                <img src="images/vector-w.png" className="infoVector info" id="vector-w"/>
+                <img src="images/vector-nne.png" className="infoVector info" id="vector-nne"/>
+                <img src="images/vector-ene.png" className="infoVector info" id="vector-ene"/>
+                <img src="images/vector-ese.png" className="infoVector info" id="vector-ese"/>
+                <img src="images/vector-sse.png" className="infoVector info" id="vector-sse"/>
+                <img src="images/vector-ssw.png" className="infoVector info" id="vector-ssw"/>
+                <img src="images/vector-wsw.png" className="infoVector info" id="vector-wsw"/>
+                <img src="images/vector-wnw.png" className="infoVector info" id="vector-wnw"/>
+                <img src="images/vector-nnw.png" className="infoVector info" id="vector-nnw"/>
             </div>
         </div>
 );
