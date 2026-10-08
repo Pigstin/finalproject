@@ -17,7 +17,7 @@ export default function GuestLobby() {
         clearTimeout(timer)
         console.log('Refreshing')
 
-        const response = await (await fetch('/refresh')).json()
+        const response = await (await fetch('/lobby/refresh')).json()
         console.log(response)
         setHostRole(response.other_role)
         setHostUsername(response.other_user)

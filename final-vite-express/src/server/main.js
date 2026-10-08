@@ -1,6 +1,7 @@
 import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
+import redirect  from "react-router";
 import {MongoClient, ObjectId} from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,8 +15,6 @@ app.use(cookieSession({
 }))
 
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
-// check for sanity
-console.log( 'uri:', uri )
 const client = new MongoClient( uri )
 
 async function run() {
@@ -32,12 +31,13 @@ async function run() {
     app.post("/lobby/create", async (req, res) => {
         if(lobbies != null) {
             const username = req.body.username
+            const new_code = pick_code()
             const json = {
                 host_name: username,
                 host_role: "host",
                 guest_name: null,
                 guest_role: "none",
-                join_code: 1234
+                join_code: new_code
             }
         try {
             const result = await lobbies.insertOne(json)
@@ -80,46 +80,97 @@ async function run() {
         }
     })
 
-    // not done 
+    // done, not tested
     app.get("/lobby/refresh", async (req, res) => {
         if(lobbies != null) {
             const lobby = await lobbies.findOne({join_code: {$eq: req.session.join_code}})
-            // if user is host... 
+            // if user is host...
             if(req.session.role == "host") {
-                const other_role = lobby.guest_role;
-                // if they have no buddy... 
-                if(other_role == "none") {
-                    // respond with other_role
-                }
-                // if they have a guest...
-                else if(other_role == "waiting") {
-                    // respond with other_role
-                }
+                // we respond with the guest's name and role. 
+                res.json({
+                    other_name: lobby.guest_name,
+                    other_role: lobby.guest_role
+                })
             }
-            // if user is guest... 
-            if(req.session.role == "waiting") {
-                // if their host has not chosen...
-                if(other_role == "host") {
-                    // respond with other_role
-                }
-                // if they host has chosen one way or the other...
-                else if(other_role == "digital") {
-                    req.session.role = "analog"
-                    // respond with other_role 
-                }
-                else if(other_role == "analog") {
-                    req.session.role == "digital"
-                    // respond with other_role
+            // and if user is guest...
+            else if(req.session.role == "waiting") {
+                // we respond with the host's! 
+                res.json({
+                    other_name: lobby.host_name,
+                    other_role: lobby.host_role
+                })
+                if(lobby.guest_role == "analog" || lobby.guest_role == "digital") {
+                    req.session.role = lobby.guest_role
                 }
             }
         }
     })
 
+    // done, not tested
+    app.patch("/lobby/assign", async (req, res) => {
+        if(lobbies != null) {
+            const lobby = await lobbies.findOne({join_code: {$eq: req.session.join_code}}),
+                chosen_role = req.body.chosen_role
 
+            if(chosen_role == "analog") {
+                req.session.role = "analog"
+                const result = await lobbies.updateOne(
+                    { join_code: {$eq: join_code} },
+                    { $set:{ host_role: "analog"}, $set:{guest_role: "digital"}}
+                )
+            }
+            else if(chosen_role == "digital") {
+                req.session.role = "digital"
+                const result = await lobbies.updateOne(
+                    { join_code: {$eq: join_code} }, 
+                    { $set: { guest_name: "digital"}, $set:{guest_role: "analog"}}
+                )
+            }
+        }
+    })
+
+    // done, not tested 
+    app.post("lobby/start", async (req, res) => {
+        if(lobbies != null && games != null) {
+            const lobby = await lobbies.findOne({join_code: {$eq: req.session.join_code}})
+            const game = await games.findOne({game_id: {$eq: req.session.join_code}})
+            // if there is no corresponding game we make it! 
+            if(game == null) {
+                const json = {
+                    game_id: req.session.join_code,
+                    dials: {A: 0, a: 0, B: 0, b: 0, C: 0, c: 0},
+                    color: "",
+                    terminal: "",
+                    last_ans: -1,
+                    correct_ans: -1, 
+                    won: false
+                    }
+                try {
+                    const result = await games.insertOne(json)
+
+                    console.log(result);
+                    res.status(201).json(result);
+                }
+                catch (error) {
+                    console.error("error creating game");
+                    console.error(error.message);
+                    res.status(500).json({ error: error.message });
+                }
+            }
+            // also, redirects to your current role
+            redirect(`/${req.session.role}`)
+        }
+    })
 
 // analog player endpoints 
 
 // digital player endpoints
+
+// helper functions 
+// TODO: uniqueness check
+    function pick_code() {
+        return Math.floor(Math.random() * 9000) + 1000;
+    }
 
 }
 
