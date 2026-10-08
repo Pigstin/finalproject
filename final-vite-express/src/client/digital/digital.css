@@ -63,7 +63,13 @@ canvas {
 }
 
 .backgroundImage {
-    width: 100%;
+    width: 100cqw;
+}
+@media (min-aspect-ratio: 16/9) {
+    .backgroundImage {
+        width: auto;
+        height: 100cqh;
+    }
 }
 
 .gameContainer {
@@ -82,7 +88,7 @@ canvas {
     font-style: normal;
     font-variation-settings:
     "BLED" 0,
-    "SCAN" 0;
+    "SCAN" -17;
     color: rgb(255, 255, 255);
 }
 
@@ -113,14 +119,25 @@ from index.css:
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
 
 attempted bangage solutions: */
 /*:root {
     color: rgb(0, 0, 0);
 }*/ 
 #root {
-    max-width: 9999999999999px;
+    max-width: 9999999999px;
     margin: 0 0;
     padding: 0;
     text-align: start;
+}
+body {
+    min-width: 0px;
+    min-height: 0px;
 }
