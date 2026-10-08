@@ -4,6 +4,7 @@ import WaveBox from "./Wavebox";
 import StatusLightSwitch from "./StatusLight";
 import style from "./Analog.module.css"
 import Printer from "./Printer";
+import StoneTablet from "./Tablet";
 
 export default function AnalogScreen() {
     return (
@@ -12,9 +13,9 @@ export default function AnalogScreen() {
                 <WaveBox />
                 <StatusLightSwitch />
             </div>
-
-            <article style={{ backgroundColor: 'beige', height: "650px", width: '440px' }}>
-            </article>
+            <StoneTablet />
+            {/* <article style={{ backgroundColor: 'beige', height: "650px", width: '440px' }}>
+            </article> */}
             <Printer />
         </main>
     )

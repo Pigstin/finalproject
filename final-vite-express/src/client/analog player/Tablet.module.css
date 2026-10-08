@@ -1,0 +1,26 @@
+.stoneTablet {
+    height: 650px;
+    width: 440px;
+}
+
+.waveOrder {
+    margin: 0px auto;
+    height: 75px;
+    width: 300px;
+    display: flex;
+    background: gray;
+    border: inset rgb(168, 168, 168) 4px;
+
+    img {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+.allButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: repeat(5, 20%);
+    height: 475px;
+    align-content: center;
+}

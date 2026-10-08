@@ -33,6 +33,15 @@
             outline: none;
         }
     }
+
+    .resetButton {
+        width: 55px;
+        height: 55px;
+        border-radius: 100%;
+        background: white;
+        color: black;
+        font-size: 12px;
+    }
 }
 
 .led {

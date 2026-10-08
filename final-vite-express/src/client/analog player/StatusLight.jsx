@@ -22,8 +22,9 @@ export default function StatusLightSwitch() {
 
     return (
         <article className={styles.statusLight}>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
                 <div className={styles.led} style={ledStyle}></div>
+                <button className={styles.resetButton} onClick={() => setColor('none')}>Reset</button>
             </div>
             <button><img src={buttonSprite} onClick={() => setColor('red')} /></button>
             <button><img src={buttonSprite} onClick={() => setColor('green')} /></button>
