@@ -21,6 +21,23 @@
     display: grid;
     grid-template-columns: repeat(4, 25%);
     grid-template-rows: repeat(5, 20%);
-    height: 475px;
-    align-content: center;
+    height: 455px;
+    align-items: center;
+    justify-items: center;
+}
+
+.tabButton {
+    width: 75px;
+    height: 75px;
+    border-radius: 5px;
+
+
+    &:hover {
+        box-shadow: 0px 0px 10px #2a7fffff;
+    }
+
+    &:active {
+        border: inset 3px rgb(167, 167, 167);
+        background-color: rgb(129, 129, 129);
+    }
 }
