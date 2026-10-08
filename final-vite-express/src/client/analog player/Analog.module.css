@@ -11,6 +11,19 @@
     align-content: center;
 }
 
+.transmitButton {
+    border-radius: 100%;
+    background: white;
+    border: inset 4px rgb(107, 107, 107);
+    width: 60px;
+    height: 60px;
+
+    &:hover {
+        box-shadow: 0px 0px 10px rgb(255, 250, 205);
+        border: none;
+    }
+}
+
 /* @media screen and (max-width: 1470px) {
     .mainArea {
         padding: 20px;
