@@ -59,15 +59,15 @@ async function run() {
     }
 })
 
-    // done but untested
+    // done and tested
     app.patch("/lobby/join", async (req, res) => { 
         if(lobbies != null) {
             const guest_name = req.body.username, 
-                join_code = req.body.join_code
+                join_code = parseInt(req.body.join_code)
             try {
                 const result = await lobbies.updateOne(
                     { join_code: {$eq: join_code} },
-                    { $set:{ guest_name: guest_name}, $set:{guest_role: "waiting"}}
+                    { $set:{ guest_name: guest_name, guest_role: "waiting"}}
                 )
                 req.session.username = guest_name
                 req.session.join_code = join_code

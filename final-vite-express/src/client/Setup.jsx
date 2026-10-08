@@ -17,8 +17,6 @@ export default function SetupPage() {
 
     function HostUsernameEntry() {
 
-        const hostForm = document.querySelector("#host_form")
-
         async function hostSubmit(event) {
             event.preventDefault()
             const name = document.querySelector("#huser").value
@@ -32,20 +30,6 @@ export default function SetupPage() {
             })
             // this does not work
             return redirect("/host")
-        }
-
-        async function guestSubmit(event) {
-            event.preventDefault()
-            const name = await document.querySelector("#guest_username").value
-            console.log(name)
-            fetch('lobby/join', {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body : JSON.stringify({
-                    username: name,
-                }),
-            })
-            setMyUsername(name)
         }
 
         return (
@@ -65,6 +49,21 @@ export default function SetupPage() {
     }
 
     function GuestUsernameEntry() {
+        async function guestSubmit(event) {
+            event.preventDefault()
+            const name = await document.querySelector("#guser").value, 
+            code = await document.querySelector("#gcode").value
+            fetch('lobby/join', {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body : JSON.stringify({
+                    username: name,
+                    join_code: code
+                }),
+            })
+            setMyUsername(name)
+        }
+
         return (
             <div hidden={myRole !== 'AlmostGuest'} >
                 <header>
@@ -72,14 +71,14 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/join'} method="post">
-                    <input name="username" type="text"></input>
+                <form method="post">
+                    <input name="username" id="guser" type="text"></input>
                     <output>Username</output>
 
-                    <input name="join_code" type="text"></input>
+                    <input name="join_code" id="gcode" type="text"></input>
                     <output>Join Code</output>
 
-                    <button type="submit" >Start Game!</button>
+                    <button onClick={guestSubmit} type="submit" >Start Game!</button>
                 </form>
             </div>
         )
