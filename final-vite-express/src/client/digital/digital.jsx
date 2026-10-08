@@ -6,7 +6,7 @@ let ctx = undefined
 function loadJS() {
     console.log("omg jabascribt")
 
-    //setup htmlFor canvas
+    //setup for canvas
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
     screenWidth = canvas.width
@@ -14,20 +14,9 @@ function loadJS() {
     ctx.fillStyle = "rgb(0 0 0)"
     ctx.fillRect(0, 0, screenWidth, screenHeight)
 
-    //setup htmlFor inputs
-    inputA = document.getElementById("A")
-    inputa = document.getElementById("a")
-    inputB = document.getElementById("B")
-    inputb = document.getElementById("b")
-    inputC = document.getElementById("C")
-    inputc = document.getElementById("c")
-    //update htmlFor (potentially) new parameters
-    p_A = inputA.defaultValue
-    p_a = inputa.defaultValue
-    p_B = inputB.defaultValue
-    p_b = inputb.defaultValue
-    p_C = inputC.defaultValue
-    p_c = inputc.defaultValue
+    //setup the info screen to display screen 1
+    disableAllImages()
+    updateInfoScreen()
 
     prevTime = document.timeline.currentTime
     requestAnimationFrame(draw)
@@ -59,31 +48,28 @@ let p_B = 0
 let p_b = 0
 let p_C = 0
 let p_c = 0
-//slider inputs that will give function parameters
-let inputA = undefined
-let inputa = undefined
-let inputB = undefined
-let inputb = undefined
-let inputC = undefined
-let inputc = undefined
+//these values are updated whenever refresh data is obtained. 
+//p_X values are set equal to these every 2 seconds. set to defaults here to start off
+let refreshVals = {"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
 
 function draw(timestamp) {
-    let deltaTime = timestamp - prevTime //miliseconds that passed since last frame. usually 16.6667ms htmlFor 60hz
+    let deltaTime = timestamp - prevTime //miliseconds that passed since last frame. usually 16.6667ms for 60hz
     prevTime = timestamp //set prevTime so that next deltaTime calculation will be accurate
 
-    //sometimes, the user tabs out. this will result in a massive deltaTime defaultValue. which messes things up and is bad. 
+    //sometimes, the user tabs out. this will result in a massive deltaTime value. which messes things up and is bad. 
     // so if deltaTime is abnormally large, just skip the frame! shouldn't be a problem unless the user has a 10Hz monitor or something.
     if (deltaTime < 100) { //only run the frame if it hasn't been more than 100ms
         scanWidth = (deltaTime / 1000) * scanLineSpeed * screenWidth + 1
         if (scanLineX > screenWidth) {
             scanLineX -= screenWidth
-            //update htmlFor (potentially) new parameters
-            p_A = inputA.defaultValue
-            p_a = inputa.defaultValue
-            p_B = inputB.defaultValue
-            p_b = inputb.defaultValue
-            p_C = inputC.defaultValue
-            p_c = inputc.defaultValue
+            //update for (potentially) new parameters
+            p_A = refreshVals["A"]
+            p_a = refreshVals["a"]
+            p_B = refreshVals["B"]
+            p_b = refreshVals["b"]
+            p_C = refreshVals["C"]
+            p_c = refreshVals["c"]
+            //TODO light here
         }
 
         //fade previous data
@@ -101,7 +87,7 @@ function draw(timestamp) {
 
         //div lines
         ctx.fillStyle = "rgb(0 66 141 / 2%)";
-        //lines htmlFor 90deg, 180deg, 270deg
+        //lines for 90deg, 180deg, 270deg
         ctx.fillRect(screenX + 1/4*screenWidth - divLineWeight/2, screenY, divLineWeight, screenHeight)
         ctx.fillRect(screenX + 2/4*screenWidth - divLineWeight, screenY, divLineWeight*2, screenHeight)
         ctx.fillRect(screenX + 3/4*screenWidth - divLineWeight/2, screenY, divLineWeight, screenHeight)
@@ -146,41 +132,157 @@ function draw(timestamp) {
     requestAnimationFrame(draw)
 }
 
+//requests new data every 1900 seconds
+//setInterval(requestData, 1900); //TODO re-enable this once everything works nicely together
+
+async function requestData() {
+
+    const response = await fetch( '/refresh/digital', {
+        method:'GET'
+    })
+
+    refreshVals = await response.json()
+    //expects a JSON object like this:
+    //{"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
+    //"light" can be "red", "green", "blue", or "off"
+}
+
+//detect key presses
+addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+        infoScreenIndex -= 1
+        //prevent underflow before index 1
+        if (infoScreenIndex < 1) {
+            infoScreenIndex = 1
+        }
+        updateInfoScreen()
+    } else if (event.key === "ArrowRight") {
+        infoScreenIndex += 1
+        //prevent overflow past index 15
+        if (infoScreenIndex > 15) {
+            infoScreenIndex = 15
+        }
+        updateInfoScreen()
+    }
+})
+
+let infoScreenIndex = 1
+function updateInfoScreen() {
+    infoText = document.getElementById("infoText");
+    infoText.innerText = infoScreenData[infoScreenIndex]
+    disableAllImages()
+    if (infoScreenIndex === 1) {
+        document.getElementById("icon-instructions-1").style.display = "block"
+    } else if (infoScreenIndex === 2) {
+        document.getElementById("icon-instructions-2").style.display = "block"
+    } //TODO: add all other images
+}
+
+function disableAllImages() {
+    document.getElementById("icon-instructions-1").style.display = "none"
+    document.getElementById("icon-instructions-2").style.display = "none"
+    //TODO: add all other images
+}
+
+const infoScreenData = {
+    1: `INSTRUCTIONS [1]\n
+        This document is for the OPERATOR's\n
+        eyes only. Your assistant is viewing\n
+        a sequence of WAVEFORMS. They will\n
+        transmit these waveforms to you for\n
+        you to decode. You can communicate\n
+        with your assistant by typing them\n
+        messages through the terminal.\n
+        View further instructions with [→].`, 
+    2: `INSTRUCTIONS [2]\n
+        The waveforms represent directions.\n
+        From the map's origin, follow these\n
+        directions. You will land on a SYMBOL.\n
+        You must communicate this symbol to\n
+        your assistant for them to use.\n
+        The operation will conclude once\n
+        three correct symbols are found.\n
+        View waveform meanings with [→].`, 
+    3: `WAVE DESIGNATION: 'Flatline' [1]\n
+        DIRECTION: North\n
+        VECTOR REPRESENTATION: (0, +1)\n
+        CWN: 1(0∠0), 2(0∠0), 3(0∠0)
+        `, 
+    4: `WAVE DESIGNATION: '1Hz Simple' [2]\n
+        DIRECTION: East\n
+        VECTOR REPRESENTATION: (+1, 0)\n
+        CWN: 1(1∠0), 2(0∠0), 3(0∠0)
+        `, 
+    5: `WAVE DESIGNATION: '2Hz Simple' [3]\n
+        DIRECTION: South\n
+        VECTOR REPRESENTATION: (0, -1)\n
+        CWN: 1(0∠0), 2(1∠0), 3(0∠0)
+        `, 
+    6: `WAVE DESIGNATION: '3Hz Simple' [4]\n
+        DIRECTION: West\n
+        VECTOR REPRESENTATION: (-1, 0)\n
+        CWN: 1(0∠0), 2(0∠0), 3(1∠0)
+        `,  
+    7: `WAVE DESIGNATION: 'Wobbly' [5]\n
+        DIRECTION: North by Northeast\n
+        VECTOR REPRESENTATION: (+1, +2)\n
+        CWN: 1(1∠0), 2(1∠-90), 3(0∠0)
+        `, 
+    8: `WAVE DESIGNATION: 'Plateau' [6]\n
+        DIRECTION: East by Northeast\n
+        VECTOR REPRESENTATION: (+2, +1)\n
+        CWN: 1(2∠-180), 2(0.5∠180), 3(0∠0)
+        `, 
+    9: `WAVE DESIGNATION: 'Central-W' [7]\n
+        DIRECTION: East by Southeast\n
+        VECTOR REPRESENTATION: (+2, -1)\n
+        CWN: 1(1∠0), 2(0∠0), 3(1∠180)
+        `, 
+    10:`WAVE DESIGNATION: 'Valley-Mountain' [8]\n
+        DIRECTION: South by Southeast\n
+        VECTOR REPRESENTATION: (+1, -2)\n
+        CWN: 1(1∠90), 2(0∠0), 3(0.5∠-90)
+        `, 
+    11:`WAVE DESIGNATION: 'Central-M' [9]\n
+        DIRECTION: South by Southwest\n
+        VECTOR REPRESENTATION: (-1, -2)\n
+        CWN: 1(0∠0), 2(1∠0), 3(1∠0)
+        `, 
+    12:`WAVE DESIGNATION: 'Bird' [10]\n
+        DIRECTION: West by Southwest\n
+        VECTOR REPRESENTATION: (-2, -1)\n
+        CWN: 1(0∠0), 2(1.5∠0), 3(0.5∠-180)
+        `, 
+    13:`WAVE DESIGNATION: 'Double-W' [11]\n
+        DIRECTION: West by Northwest\n
+        VECTOR REPRESENTATION: (-2, +1)\n
+        CWN: 1(0.5∠0), 2(0.5∠0), 3(1∠0)
+        `, 
+    14:`WAVE DESIGNATION: 'Sawtooth' [12]\n
+        DIRECTION: North by Northwest\n
+        VECTOR REPRESENTATION: (-1, +2)\n
+        CWN: 1(2∠90), 2(1∠90), 3(0.5∠90)
+        `, 
+    15:`APPENDIX [A]\n
+        describe CWN here TODO`
+}
+
 
 export default function DigitalPage() {
     return (
         <div className="DigitalPage" onLoad={evt => {loadJS()}}>                 
         {/* add onload function */}
 
-        <div className="gameContainer">
-            <img src="images/background.png" className="backgroundImage"/>
-            <canvas id="canvas">
-                game's supposed to show up here. if you see this text, RUN. IT'S COMING.
-            </canvas>
-        </div>
-
-
-
-        <p>A*cos(1x + a) + B*cos(2x + b) + C*cos(3x + c)</p>
-        <p>Waveform settings:</p>
-        <div>
-            <input type="range" id="A" name="A" min="0" max="2" defaultValue="1" step="0.01"/>
-            <label htmlFor="A">A (1Hz amplitude)</label>
-            <input type="range" id="a" name="a" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="a">a (1Hz phase)</label>
-        </div>
-        <div>
-            <input type="range" id="B" name="B" min="0" max="2" defaultValue="0" step="0.01"/>
-            <label htmlFor="B">B (2Hz amplitude)</label>
-            <input type="range" id="b" name="b" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="b">b (2Hz phase)</label>
-        </div>
-        <div>
-            <input type="range" id="C" name="C" min="0" max="2" defaultValue="0" step="0.01"/>
-            <label htmlFor="C">C (3Hz amplitude)</label>
-            <input type="range" id="c" name="c" min="-180" max="180" defaultValue="0" step="1"/>
-            <label htmlFor="c">c (3Hz phase)</label>    
-        </div>
+            <div className="gameContainer">
+                <img src="images/background.png" className="backgroundImage"/>
+                <canvas id="canvas">
+                    game's supposed to show up here. if you see this text, RUN. IT'S COMING.
+                </canvas>
+                
+                <p className="infoText" id="infoText"></p>
+                <img src="images/icon-instructions-1.png" className="infoImage" id="icon-instructions-1"/>
+                <img src="images/icon-instructions-2.png" className="infoImage" id="icon-instructions-2"/>
+            </div>
         </div>
 );
 } 
