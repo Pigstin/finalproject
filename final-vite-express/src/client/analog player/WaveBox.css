@@ -1,0 +1,22 @@
+:root {
+    --dial-square-size: 100px;
+}
+
+.wavebox {
+    width: 600px;
+    height: 350px;
+    padding: 20px;
+    border-radius: 0px;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    background-color: gainsboro;
+    border: outset rgb(148, 148, 148) 8px
+}
+
+.dial-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 33% 33% 33%;
+    gap: 0px 5px;
+    place-items: center;
+}

@@ -8,8 +8,11 @@ import App from "./App";
 import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
 import GuestLobby from "./Guest";
-import { DialInput, DialSample } from "./Dial";
+import { DialInput, DialSample } from "./analog player/Dial";
+import WaveBox from "./analog player/Wavebox";
 import CharlotteTestZone from "./CharlotteTestZone";
+import StatusLightSwitch from "./analog player/StatusLight";
+import AnalogScreen from "./analog player/Analog";
 
 const router = createBrowserRouter([
   {
@@ -29,8 +32,20 @@ const router = createBrowserRouter([
     element: <DialSample />
   },
   {
+    path: '/wave',
+    element: <WaveBox />
+  },
+  {
     path: '/charlotteTest',
     element: <CharlotteTestZone />
+  },
+  {
+    path: '/light',
+    element: <StatusLightSwitch />
+  },
+  {
+    path: '/analog',
+    element: <AnalogScreen />
   }
 
 ])
