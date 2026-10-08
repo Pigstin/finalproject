@@ -1,3 +1,4 @@
+import styles from "./index.module.css"
 import { useState } from "react";
 
 export default function SetupPage() {
@@ -6,7 +7,7 @@ export default function SetupPage() {
 
     function FirstPage() {
         return (
-            <div hidden={myRole !== 'none'}>
+            <div className={styles.setupMenus} hidden={myRole !== 'none'}>
                 <h1>Frequency Freak</h1>
                 <button onClick={() => setMyRole('AlmostHost')}>Host Game</button>
                 <button onClick={() => setMyRole('AlmostGuest')}>Join Game</button>
