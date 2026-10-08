@@ -118,9 +118,11 @@ attempted bangage solutions: */
 /*:root {
     color: rgb(0, 0, 0);
 }*/ 
-#root {
-    max-width: 9999999999999px;
-    margin: 0 0;
-    padding: 0;
+.DigitalPage { 
+    /* why was this an id selector and not the pseudoclass? */
+    /* (#root instead of :root) */
+    /* also I'm changing this to be the DigitalPage class and not the root pseudoclass */
     text-align: start;
+    color: rgb(0,0,0);
 }
+
