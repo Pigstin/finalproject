@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap');
+
 canvas {
     border: 1px solid black;
     position: absolute;
@@ -38,6 +40,28 @@ canvas {
     }
 }
 
+.terminalText {
+    position: absolute;
+    left: 64%;
+    width: 25%;
+    font-size: 2cqw;
+}
+/*hacky way to make text scale properly regardless of aspect ratio*/
+@media (min-aspect-ratio: 16/9) {
+    .terminalText {
+        font-size: 3.555555cqh; /* previous font size (in cqw) * 16 / 9 */
+    }
+}
+#terminalText1 {
+    top: 61%
+}
+#terminalText2 {
+    top: 67%
+}
+#terminalText3 {
+    top: 73%
+}
+
 .backgroundImage {
     width: 100%;
 }
@@ -49,6 +73,17 @@ canvas {
     height: auto;
     width: auto;
     aspect-ratio: 16 / 9;
+}
+
+.coolFont {
+    font-family: "Sixtyfour", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+    "BLED" 0,
+    "SCAN" 0;
+    color: rgb(255, 255, 255);
 }
 
 /*
@@ -80,11 +115,11 @@ from index.css:
 }
 
 attempted bangage solutions: */
-:root {
+/*:root {
     color: rgb(0, 0, 0);
-}
+}*/ 
 #root {
-    max-width: none;
+    max-width: 9999999999999px;
     margin: 0 0;
     padding: 0;
     text-align: start;

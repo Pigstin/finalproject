@@ -166,22 +166,30 @@ addEventListener("keydown", (event) => {
     }
 })
 
+//start the info screen on page 1, for obvious reasons
 let infoScreenIndex = 1
+//run this function whenever infoScreenIndex changes, so those changes can get diplayed
 function updateInfoScreen() {
+    //update infoText
     infoText = document.getElementById("infoText");
     infoText.innerText = infoScreenData[infoScreenIndex]
-    disableAllInfoImages()
-    if (infoScreenIndex === 1) {
+    //update info images
+    disableAllInfoImages() //first, disable everything from before
+    //next, enable whatever needs to be enabled
+    if (infoScreenIndex === 1) { //page 1: instructions 1
         document.getElementById("icon-instructions-1").style.display = "block"
-    } else if (infoScreenIndex === 2) {
+    } else if (infoScreenIndex === 2) { //page 2: instructions 2
         document.getElementById("icon-instructions-2").style.display = "block"
-    } else if (infoScreenIndex === 15) {
+    } else if (infoScreenIndex === 15) { //page 15: appendix A
         document.getElementById("icon-appendix-a").style.display = "block"
-    } else {
-        //time to render a function onto the canvas
+    } else { //all other pages: waveforms
+        //displaying one of the 12 waveforms
+        //show canvas and draw waveform onto it
         document.getElementById("infoCanvas").style.display = "block"
-        let waveNumber = infoScreenIndex - 2
+        let waveNumber = infoScreenIndex - 2 //ex. page 5 has waveform 3. since there's 2 info pages before everything
         drawInfoWave(waveNumber)
+        //display the correct vector image
+        //i'm sure there's a way to do this better. but it's fiiiiiiine. 
         if (infoScreenIndex === 3) {document.getElementById("vector-n").style.display = "block"}
         else if (infoScreenIndex === 4) {document.getElementById("vector-e").style.display = "block"}
         else if (infoScreenIndex === 5) {document.getElementById("vector-s").style.display = "block"}
@@ -199,8 +207,11 @@ function updateInfoScreen() {
 
 //finds everything with the "info" class and makes it disappear
 function disableAllInfoImages() {
+    //list of every element in class "info"
     const allInfoElements = document.getElementsByClassName("info")
+    //loop through all elements
     for (const infoElement of allInfoElements) {
+        //visually disable this element
         infoElement.style.display = "none"
     }
 }
@@ -262,7 +273,7 @@ const waveData = {
     12: {A: 2, a: 90, B: 1, b: 90, C: 0.5, c: 90}, //sawtooth 
 }
 
-//160 x 160 images
+//all text for the infoScreen is stored here
 const infoScreenData = {
     1: `INSTRUCTIONS [1]\n
         This document is for the OPERATOR's\n
@@ -355,6 +366,7 @@ const infoScreenData = {
         `
 }
 
+//pseudo-HTML part. i still don't really understand react. but it all seems to work like html does, so it's okay?
 export default function DigitalPage() {
     return (
         <div className="DigitalPage" onLoad={evt => {loadJS()}}>                 
@@ -383,6 +395,10 @@ export default function DigitalPage() {
                 <img src="images/vector-wsw.png" className="infoVector info" id="vector-wsw"/>
                 <img src="images/vector-wnw.png" className="infoVector info" id="vector-wnw"/>
                 <img src="images/vector-nnw.png" className="infoVector info" id="vector-nnw"/>
+
+                <p className="terminalText coolFont" id="terminalText1">&gt;test1</p>
+                <p className="terminalText coolFont" id="terminalText2">&gt;test2</p>
+                <p className="terminalText coolFont" id="terminalText3">&gt;woahh</p>
             </div>
         </div>
 );
