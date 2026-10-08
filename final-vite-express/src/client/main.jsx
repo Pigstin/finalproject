@@ -4,7 +4,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router"
 
-import App from "./App";
 import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
 import GuestLobby from "./Guest";
