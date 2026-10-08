@@ -43,7 +43,7 @@ canvas {
 .terminalText {
     position: absolute;
     left: 64%;
-    width: 25%;
+    width: 30%;
     font-size: 2cqw;
 }
 /*hacky way to make text scale properly regardless of aspect ratio*/
@@ -53,18 +53,19 @@ canvas {
     }
 }
 #terminalText1 {
-    top: 61%
+    top: 61.5%
 }
 #terminalText2 {
-    top: 67%
+    top: 67.5%
 }
 #terminalText3 {
-    top: 73%
+    top: 73.5%
 }
 
 .backgroundImage {
     width: 100cqw;
 }
+/*if the window is too wide, base image size off the hight instead*/
 @media (min-aspect-ratio: 16/9) {
     .backgroundImage {
         width: auto;
@@ -88,21 +89,11 @@ canvas {
     font-style: normal;
     font-variation-settings:
     "BLED" 0,
-    "SCAN" -17;
-    color: rgb(255, 255, 255);
+    "SCAN" 0;
 }
 
 /*
 KNOWN PROBLEMS:
-
-from App.css:
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 from index.css:
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -118,33 +109,22 @@ from index.css:
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 attempted bangage solutions: */
-/*:root {
-    color: rgb(0, 0, 0);
-}*/ 
 .DigitalPage { 
-    /* why was this an id selector and not the pseudoclass? */
-    /* (#root instead of :root) */
-    /* also I'm changing this to be the DigitalPage class and not the root pseudoclass */
     text-align: start;
-    color: rgb(0,0,0);
+    color: rgb(255,255,255);
 }
-/*#root {
-    max-width: 9999999999px;
-    margin: 0 0;
+/*unfortunately, can't remove root padding without telling root directly. */
+:root {
     padding: 0;
-    text-align: start;
 }
+/*also, if i wanted the screen to be centered:
 body {
-    min-width: 0px;
-    min-height: 0px;
+    justify-content: center;
 }*/

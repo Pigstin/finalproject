@@ -20,6 +20,8 @@ function loadJS() {
         //setup the info screen to display screen 1
         disableAllInfoImages()
         updateInfoScreen()
+        //make terminal normal
+        updateTerminal()
 
         prevTime = document.timeline.currentTime
         requestAnimationFrame(draw)
@@ -147,6 +149,10 @@ async function requestData() {
     //"light" can be "red", "green", "blue", or "off"
 }
 
+const terminalCharacterLimit = 13;
+let terminalString1 = undefined
+let terminalString2 = undefined
+let terminalStringCurrent = ""
 //detect key presses
 addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") {
@@ -164,7 +170,52 @@ addEventListener("keydown", (event) => {
         }
         updateInfoScreen()
     }
+    //if it's a printable character:
+    else if (event.key.length === 1) {
+        //make sure we're not going over the character limit
+        if (terminalStringCurrent.length < terminalCharacterLimit) {
+            //add the character to the string
+            terminalStringCurrent += event.key
+            updateTerminal()
+        }
+    } 
+    //if they're deleting a character:
+    else if (event.key === "Backspace") {
+        //make sure there's a character to delete first
+        if (terminalStringCurrent.length > 0) {
+            //remove it
+            terminalStringCurrent = terminalStringCurrent.slice(0, -1)
+            updateTerminal()
+        }
+    }
+    //if the player sends a message:
+    else if ((event.key === "Enter") || (event.key === "Return")) {
+        //prepare message json
+        let msgJSON = {"msg": terminalStringCurrent}
+
+        //update visuals of terminal
+        terminalString1 = terminalString2
+        terminalString2 = terminalStringCurrent
+        terminalStringCurrent = ""
+        updateTerminal()
+        
+        //TODO send thing to server
+    }
 })
+
+function updateTerminal() {
+    if (terminalString1 === undefined) {document.getElementById("terminalText1").innerText = ""} 
+    else {document.getElementById("terminalText1").innerText = ">" + terminalString1}
+
+    if (terminalString2 === undefined) {document.getElementById("terminalText2").innerText = ""} 
+    else {document.getElementById("terminalText2").innerText = ">" + terminalString2}
+    
+    if (terminalStringCurrent.length !== terminalCharacterLimit) {
+        document.getElementById("terminalText3").innerText = ">" + terminalStringCurrent + "_"
+    } else {
+        document.getElementById("terminalText3").innerText = ">" + terminalStringCurrent
+    }
+}
 
 //start the info screen on page 1, for obvious reasons
 let infoScreenIndex = 1
@@ -396,9 +447,9 @@ export default function DigitalPage() {
                 <img src="images/vector-wnw.png" className="infoVector info" id="vector-wnw"/>
                 <img src="images/vector-nnw.png" className="infoVector info" id="vector-nnw"/>
 
-                <p className="terminalText coolFont" id="terminalText1">&gt;test1</p>
-                <p className="terminalText coolFont" id="terminalText2">&gt;test2</p>
-                <p className="terminalText coolFont" id="terminalText3">&gt;woahh</p>
+                <p className="terminalText coolFont" id="terminalText1"></p>
+                <p className="terminalText coolFont" id="terminalText2"></p>
+                <p className="terminalText coolFont" id="terminalText3">&gt;_</p>
             </div>
         </div>
 );
