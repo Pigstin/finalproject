@@ -7,8 +7,9 @@
     margin: 0px auto;
     height: 75px;
     width: 300px;
+    gap: 10px;
     display: flex;
-    background: gray;
+    background: rgb(128, 128, 128);
     border: inset rgb(168, 168, 168) 4px;
 
     img {
