@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"
 
 export default function HostLobby() {
     const [myUsername, setMyUsername] = useState('')
@@ -65,7 +66,13 @@ export default function HostLobby() {
             </main>
         )
     }
-    // TODO: Handle if the other role is 'analog' or 'digital'
+    async function startGame() {
+        const response = await fetch("/lobby/start", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        // navigate to analog/digital depending on my role
+    }
 
     async function decideRole(chosen_role) {
         const body = JSON.stringify({ "chosen_role": chosen_role })

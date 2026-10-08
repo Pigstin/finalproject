@@ -55,5 +55,13 @@ export default function GuestLobby() {
             </main>
         )
     }
+
+    async function startGame() {
+        const response = await fetch("/lobby/start", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        // navigate to analog/digital depending on my role
+    }
     // TODO: Handle if the other role is 'analog' or 'digital'
 }
