@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { redirect } from "react-router"
 
 export default function SetupPage() {
     const [myRole, setMyRole] = useState('none')
@@ -16,14 +17,35 @@ export default function SetupPage() {
 
     function HostUsernameEntry() {
 
-        // This probably won't get used
-        async function createGame(event) {
+        const hostForm = document.querySelector("#host_form")
+
+        async function hostSubmit(event) {
             event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            console.log(formData.get('username'))
-            setMyUsername(formData.get('username'))
-            //TODO : Call the server to create a game document
-            //Assuming Creating game is successful
+            const name = document.querySelector("#huser").value
+            console.log(name)
+            const response = await fetch('lobby/create', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body : JSON.stringify({
+                    username: name,
+                }),
+            })
+            // this does not work
+            return redirect("/host")
+        }
+
+        async function guestSubmit(event) {
+            event.preventDefault()
+            const name = await document.querySelector("#guest_username").value
+            console.log(name)
+            fetch('lobby/join', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body : JSON.stringify({
+                    username: name,
+                }),
+            })
+            setMyUsername(name)
         }
 
         return (
@@ -33,10 +55,10 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/create'} method="post">
-                    <input name="username" type="text"></input>
+                <form id="host_form">
+                    <input name="username" id="huser" type="text"></input>
                     <output>Enter Username</output>
-                    <button type="submit" >Start Game!</button>
+                    <button onClick={hostSubmit} id="submit" >Start Game!</button>
                 </form>
             </div>
         )

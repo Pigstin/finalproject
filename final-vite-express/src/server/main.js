@@ -1,7 +1,7 @@
 import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
-import redirect  from "react-router";
+import { redirect } from "react-router";
 import {MongoClient, ObjectId} from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
@@ -32,6 +32,7 @@ async function run() {
         if(lobbies != null) {
             const username = req.body.username
             const new_code = pick_code()
+            console.log(new_code)
             const json = {
                 host_name: username,
                 host_role: "host",
@@ -43,10 +44,12 @@ async function run() {
             const result = await lobbies.insertOne(json)
 
             req.session.username = username
-            req.session.join_code = 1234 
+            req.session.join_code = new_code 
             req.session.role = "host"
             console.log(result);
             res.status(201).json(result);
+
+
         }
         catch (error) {
             console.error("error creating lobby");
