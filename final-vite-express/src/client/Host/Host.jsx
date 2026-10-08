@@ -17,10 +17,16 @@ export default function HostLobby() {
         clearTimeout(timer)
         console.log('Refreshing')
 
-        const response = await (await fetch('/lobby/refresh')).json()
-        console.log(response)
-        setGuestRole(response.other_role)
-        setGuestUsername(response.other_user)
+        const response = await fetch(`lobby/refresh`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' }
+            })
+        const json = await response.json()
+        setMyRole(json.host_role)
+        setMyUsername(json.host_name)
+        setGuestRole(json.guest_role)
+        setGuestUsername(json.guest_name)
+        setJoinCode(json.join_code)
 
         timer = setTimeout(() => { refresh() }, refreshMsec)
     }
@@ -64,7 +70,7 @@ export default function HostLobby() {
     async function decideRole(chosen_role) {
         const body = JSON.stringify({ "chosen_role": chosen_role })
         const response = await fetch("/lobby/assign", {
-            method: 'POST',
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body
         })

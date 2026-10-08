@@ -83,51 +83,44 @@ async function run() {
         }
     })
 
-    // done, not tested
-    app.get("/lobby/refresh", async (req, res) => {
+    // done and tested
+    app.post("/lobby/refresh", async (req, res) => {
         if(lobbies != null) {
             const lobby = await lobbies.findOne({join_code: {$eq: req.session.join_code}})
             // if user is host...
-            if(req.session.role == "host") {
-                // we respond with the guest's name and role. 
-                res.json({
-                    other_name: lobby.guest_name,
-                    other_role: lobby.guest_role
-                })
-            }
-            // and if user is guest...
-            else if(req.session.role == "waiting") {
-                // we respond with the host's! 
-                res.json({
-                    other_name: lobby.host_name,
-                    other_role: lobby.host_role
-                })
-                if(lobby.guest_role == "analog" || lobby.guest_role == "digital") {
-                    req.session.role = lobby.guest_role
+                // we respond with names and roles.
+                const data = { 
+                    host_name: lobby.host_name,
+                    host_role: lobby.host_role,
+                    guest_name: lobby.guest_name,
+                    guest_role: lobby.guest_role,
+                    join_code: lobby.join_code
                 }
+                res.json(data)
             }
-        }
-    })
+            })
 
     // done, not tested
     app.patch("/lobby/assign", async (req, res) => {
         if(lobbies != null) {
-            const lobby = await lobbies.findOne({join_code: {$eq: req.session.join_code}}),
-                chosen_role = req.body.chosen_role
+            const chosen_role = req.body.chosen_role
 
             if(chosen_role == "analog") {
                 req.session.role = "analog"
                 const result = await lobbies.updateOne(
-                    { join_code: {$eq: join_code} },
-                    { $set:{ host_role: "analog"}, $set:{guest_role: "digital"}}
+                    { join_code: {$eq: req.session.join_code} },
+                    { $set:{ host_role: "analog", guest_role: "digital"}}
                 )
             }
             else if(chosen_role == "digital") {
                 req.session.role = "digital"
                 const result = await lobbies.updateOne(
-                    { join_code: {$eq: join_code} }, 
-                    { $set: { guest_name: "digital"}, $set:{guest_role: "analog"}}
+                    { join_code: {$eq: req.session.join_code} }, 
+                    { $set: { host_role: "digital", guest_role: "analog"}}
                 )
+            }
+            else {
+                console.log(chosen_role)
             }
         }
     })

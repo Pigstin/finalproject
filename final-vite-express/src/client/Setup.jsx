@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { redirect } from "react-router"
+import { useNavigate } from "react-router"
 
 export default function SetupPage() {
     const [myRole, setMyRole] = useState('none')
     const [myUsername, setMyUsername] = useState('')
+    const navigate = useNavigate()
 
     function FirstPage() {
         return (
@@ -28,8 +29,7 @@ export default function SetupPage() {
                     username: name,
                 }),
             })
-            // this does not work
-            return redirect("/host")
+            navigate("/host")
         }
 
         return (
@@ -62,6 +62,7 @@ export default function SetupPage() {
                 }),
             })
             setMyUsername(name)
+            navigate("/guest")
         }
 
         return (

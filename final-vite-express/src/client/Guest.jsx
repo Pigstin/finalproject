@@ -17,10 +17,17 @@ export default function GuestLobby() {
         clearTimeout(timer)
         console.log('Refreshing')
 
-        const response = await (await fetch('/lobby/refresh')).json()
-        console.log(response)
-        setHostRole(response.other_role)
-        setHostUsername(response.other_user)
+        const response = await fetch(`lobby/refresh`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' }
+            })
+        const json = await response.json()
+        console.log(json)
+        setMyRole(json.guest_role)
+        setMyUsername(json.guest_name)
+        setHostRole(json.host_role)
+        setHostUsername(json.host_name)
+        setJoinCode(json.join_code)
 
         timer = setTimeout(() => { refresh() }, refreshMsec)
     }
