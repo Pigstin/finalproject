@@ -12,9 +12,10 @@ export default function AnalogScreen() {
                 <WaveBox />
                 <StatusLightSwitch />
             </div>
-            <Printer />
-            <article style={{ backgroundColor: 'beige', height: "650px", width: '340px' }}>
+
+            <article style={{ backgroundColor: 'beige', height: "650px", width: '440px' }}>
             </article>
+            <Printer />
         </main>
     )
 }
