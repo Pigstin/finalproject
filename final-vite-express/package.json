@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/server/main.js -w src/server",
-    "start": "cross-env NODE_ENV=production node src/server/main.js",
-    "build": "vite build"
+    "build": "vite build",
+    "start": "npx vite",
+    "dev_server": "cd ./src/server/ & nodemon main.js",
+    "prd_server": "cd ./src/server/ & node main.js"
   },
   "dependencies": {
     "cookie-session": "^2.1.1",
