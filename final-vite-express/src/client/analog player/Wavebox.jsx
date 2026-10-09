@@ -52,11 +52,11 @@ export default function WaveBox() {
     }
 
     return (
-        <article>
+        <article className="wavebox">
             <div style={waveBoxStyle}>
                 <LineChart data={chartData} style={{ width: "100%", height: "100%" }}>
                     <YAxis domain={[-2, 2]} hide />
-                    <Line dot={false} stroke="#104ef8" strokeWidth={3} isAnimationActive={false} animationBegin={false} type="monotone" dataKey='y' />
+                    <Line dot={false} stroke="#0de618" strokeWidth={3} isAnimationActive={false} animationBegin={false} type="monotone" dataKey='y' />
                 </LineChart>
             </div>
             <div className="dial-container">

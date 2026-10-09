@@ -2,7 +2,7 @@ import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router"
+import { BrowserRouter,createBrowserRouter, RouterProvider } from "react-router"
 
 import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
@@ -11,6 +11,8 @@ import { DialInput, DialSample } from "./analog player/Dial";
 import WaveBox from "./analog player/Wavebox";
 import CharlotteTestZone from "./CharlotteTestZone";
 import DigitalPage from './digital/digital'
+import StatusLightSwitch from "./analog player/StatusLight";
+import AnalogScreen from "./analog player/Analog";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,6 @@ const router = createBrowserRouter([
   {
     path: '/dial',
     element: <DialSample />
-    //element: <DialInput minVal={-50} maxVal={50} valueModifier={() => { }} />
   },
   {
     path: '/wave',
@@ -41,6 +42,14 @@ const router = createBrowserRouter([
   {
     path: '/digital',
     element: <DigitalPage/>
+  },
+  {
+    path: '/light',
+    element: <StatusLightSwitch />
+  },
+  {
+    path: '/analog',
+    element: <AnalogScreen />
   }
 
   // https://reactrouter.com/start/data/route-object
