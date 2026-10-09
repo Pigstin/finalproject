@@ -1,5 +1,6 @@
 import './digital.css'
 
+
 let oscCanvas = undefined
 let oscCtx = undefined
 
@@ -143,8 +144,8 @@ function draw(timestamp) {
 
 async function requestData() {
 
-    const response = await fetch('/digital/refresh/', {
-        method: 'POST',
+    const response = await fetch(`/api/digital/refresh/`, {
+        method: 'GET',
         headers: { "Content-Type": "application/json" }
     })
 
@@ -227,7 +228,7 @@ addEventListener("keydown", (event) => {
         // lambda function who's sole purpose is to update a resource 
         // it is okay that this is here as we don't need to wait on it 
         (async () => {
-            const response = await fetch('/digital/terminal/', {
+            const response = await fetch(`/api/digital/terminal/`, {
                 method: 'PATCH',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -295,18 +296,6 @@ function updateInfoScreen() {
         if (infoScreenIndex >= 3 && infoScreenIndex <= 14) {
             document.getElementById(`vector-${vectorElmIds[infoScreenIndex - 3]}`).style.display = "block"
         }
-        // if (infoScreenIndex === 3) {document.getElementById("vector-n").style.display = "block"}
-        // else if (infoScreenIndex === 4) {document.getElementById("vector-e").style.display = "block"}
-        // else if (infoScreenIndex === 5) {document.getElementById("vector-s").style.display = "block"}
-        // else if (infoScreenIndex === 6) {document.getElementById("vector-w").style.display = "block"}
-        // else if (infoScreenIndex === 7) {document.getElementById("vector-nne").style.display = "block"}
-        // else if (infoScreenIndex === 8) {document.getElementById("vector-ene").style.display = "block"}
-        // else if (infoScreenIndex === 9) {document.getElementById("vector-ese").style.display = "block"}
-        // else if (infoScreenIndex === 10) {document.getElementById("vector-sse").style.display = "block"}
-        // else if (infoScreenIndex === 11) {document.getElementById("vector-ssw").style.display = "block"}
-        // else if (infoScreenIndex === 12) {document.getElementById("vector-wsw").style.display = "block"}
-        // else if (infoScreenIndex === 13) {document.getElementById("vector-wnw").style.display = "block"}
-        // else if (infoScreenIndex === 14) {document.getElementById("vector-nnw").style.display = "block"}
     }
 }
 

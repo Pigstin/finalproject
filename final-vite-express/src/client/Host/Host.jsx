@@ -22,8 +22,8 @@ export default function HostLobby() {
         clearTimeout(timer)
         // console.log('Refreshing')
 
-        const response = await fetch(`lobby/refresh`, {
-            method: "POST",
+        const response = await fetch(`/api/lobby/refresh`, {
+            method: "GET",
             headers: { 'Content-Type': 'application/json' }
         })
         const json = await response.json()
@@ -78,7 +78,7 @@ export default function HostLobby() {
         )
     }
     async function startGame() {
-        const response = await fetch("/lobby/start", {
+        const response = await fetch(`/api/lobby/start`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -89,7 +89,7 @@ export default function HostLobby() {
 
     async function decideRole(chosen_role) {
         const body = JSON.stringify({ "chosen_role": chosen_role })
-        const response = await fetch("/lobby/assign", {
+        const response = await fetch(`/api/lobby/assign`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body
