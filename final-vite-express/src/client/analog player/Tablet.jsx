@@ -23,8 +23,6 @@ import Symbol18 from "./assets/Tablet Buttons/symbol18.svg"
 import Symbol19 from "./assets/Tablet Buttons/symbol19.svg"
 import Symbol20 from "./assets/Tablet Buttons/symbol20.svg"
 
-const API_LINK = import.meta.env.API_LINK
-
 
 export default function StoneTablet() {
     const [targetSymbol, setTargetSymbol] = useState(1)
@@ -95,12 +93,12 @@ export default function StoneTablet() {
             if (number === targetSymbol) {
                 console.log('Correct Guess!')
                 setScore(score + 1)
-                fetch(`${API_LINK}/analog/score`, { method: 'PATCH' })
+                fetch(`/api/analog/score`, { method: 'PATCH' })
             }
             else {
                 console.log('Incorrect Guess')
                 setScore(0)
-                fetch(`${API_LINK}/analog/wipe`, { method: 'PATCH' })
+                fetch(`/api/analog/wipe`, { method: 'PATCH' })
             }
 
             // Set new target symbol

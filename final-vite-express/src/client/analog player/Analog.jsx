@@ -6,7 +6,6 @@ import Printer from "./Printer";
 import StoneTablet from "./Tablet";
 import winmage from "./assets/AquaAeroWinScreen.png"
 
-const API_LINK = import.meta.env.API_LINK
 
 export default function AnalogScreen() {
     const [aAmp, set_aAmp] = useState(1)
@@ -28,7 +27,7 @@ export default function AnalogScreen() {
     const refreshMsec = 3000;
     async function refresh() {
         clearTimeout(refreshTimer)
-        const data = await (await fetch(`${API_LINK}/analog/refresh`, { method: 'POST' })).json()
+        const data = await (await fetch(`/api/analog/refresh`, { method: 'GET' })).json()
         console.log(data)
 
         setMesKey(mesKey + 1)
@@ -103,7 +102,7 @@ export default function AnalogScreen() {
                 values: { A: aAmp, a: aPhase, B: bAmp, b: bPhase, C: cAmp, c: cPhase }
             }
 
-            fetch(`${API_LINK}/analog/dials`, {
+            fetch(`/api/analog/dials`, {
                 method: "PATCH",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

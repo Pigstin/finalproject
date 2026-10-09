@@ -3,8 +3,6 @@ import styles from "./StatusLight.module.css"
 import buttonSprite from "./assets/Dial.svg"
 console.log(buttonSprite)
 
-const API_LINK = import.meta.env.API_LINK
-
 export default function StatusLightSwitch({ color, setColor }) {
 
     let ledStyle = (color === 'red') ? {
@@ -35,7 +33,7 @@ export default function StatusLightSwitch({ color, setColor }) {
 
     function colorChosen(color) {
         setColor(color)
-        fetch(`${API_LINK}/analog/color`, {
+        fetch(`/api/analog/color`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ color: color })

@@ -11,7 +11,7 @@
   - [x]  terminal data on analog not scaling, just being replaced
     - this doesnt and wont work, consider it done   
 - [ ] record video 1:00 - 2:00 (?)
-- [ ] deploy site on render
+- [x] deploy site on render
 - [ ] pull request to submit --do tomorrow(?)  
 - revise readme to include: 
   - [ ] instructions for use 

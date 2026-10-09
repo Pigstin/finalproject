@@ -7,13 +7,21 @@ export default defineConfig(({mode}) => {
   // Set the third parameter to '' to load all env regardless of the
   // `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '')
+  console.log(env.VITE_API_LINK)
   return {
     plugins: [react()],
     define: {
-      API_LINK: JSON.stringify(env.API_LINK)
+      VITE_API_LINK: JSON.stringify(env.VITE_API_LINK)
     },
     server : {
       port: env.PORT ? Number(env.PORT) : 5173,
+      proxy : {
+        '/api' : {
+          target: env.VITE_API_LINK,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        } 
+      } 
     },
   }
 });
