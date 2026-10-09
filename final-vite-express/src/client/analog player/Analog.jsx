@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { DialInput } from "./Dial";
 import WaveBox from "./Wavebox";
 import StatusLightSwitch from "./StatusLight";
 import style from "./Analog.module.css"
@@ -7,19 +6,44 @@ import Printer from "./Printer";
 import StoneTablet from "./Tablet";
 
 export default function AnalogScreen() {
+    const [aAmp, set_aAmp] = useState(1)
+    const [aPhase, set_aPhase] = useState(0)
+    const [bAmp, set_bAmp] = useState(0)
+    const [bPhase, set_bPhase] = useState(0)
+    const [cAmp, set_cAmp] = useState(0)
+    const [cPhase, set_cPhase] = useState(0)
+
+    const [color, setColor] = useState('none')
+
+    const [messages, setMessages] = useState([{ key: -3, msg: "For" }, { key: -2, msg: "Pete's" }, { key: -1, msg: "Sake" }])
+    const [mesKey, setMesKey] = useState(0)
+
+
     return (
         <main className={style.mainArea}>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", backgroundColor: 'silver', border: 'outset 4px gray' }}>
-                <WaveBox />
+                <WaveBox aAmp={aAmp} bAmp={bAmp} cAmp={cAmp} set_aAmp={set_aAmp} set_bAmp={set_bAmp} set_cAmp={set_cAmp}
+                    aPhase={aPhase} bPhase={bPhase} cPhase={cPhase} set_aPhase={set_aPhase} set_bPhase={set_bPhase} set_cPhase={set_cPhase} />
                 <div style={{ display: "flex", flexDirection: "row", gap: "20px" }} >
-                    <StatusLightSwitch />
+                    <StatusLightSwitch color={color} setColor={setColor} />
                     <TransmitButton />
                 </div>
             </div>
             <StoneTablet />
-            <Printer />
+            <Printer messages={messages} />
         </main>
     )
+
+    // TODO : Call this in refresh, passing in terminal value
+    function newMessageReceived(latestMessage) {
+        // Super janky, but check if the latest message is different from the last message in the array
+        if (latestMessage !== messages.at(messages.length - 1).msg) {
+            let tempMessages = messages
+            tempMessages.push({ key: mesKey, msg: latestMessage })
+            setMessages(tempMessages)
+            setMesKey(mesKey + 1)
+        }
+    }
 
     function TransmitButton() {
         const lightOffStyle = {
@@ -44,6 +68,13 @@ export default function AnalogScreen() {
             setLightStyle(lightOnStyle)
 
             setTimeout(() => { setLightStyle(lightOffStyle) }, 3000)
+
+            //TODO: send over all the needed data
+
+            let data = {
+                dials: { A: aAmp, a: aPhase, B: bAmp, b: bPhase, C: cAmp, c: cPhase },
+                color: color,
+            }
         }
 
         return (
