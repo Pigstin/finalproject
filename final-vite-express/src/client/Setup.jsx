@@ -40,8 +40,9 @@ export default function SetupPage() {
                     </nav>
                 </header>
                 <form id="host_form">
+                    <output>Enter Username</output> 
                     <input name="username" id="huser" type="text"></input>
-                    <output>Enter Username</output>
+                    <br></br>
                     <button onClick={hostSubmit} id="submit" >Start Game!</button>
                 </form>
             </div>
@@ -73,12 +74,12 @@ export default function SetupPage() {
                     </nav>
                 </header>
                 <form method="post">
-                    <input name="username" id="guser" type="text"></input>
                     <output>Username</output>
-
-                    <input name="join_code" id="gcode" type="text"></input>
+                    <input name="username" id="guser" type="text"></input>
+                    <br></br>
                     <output>Join Code</output>
-
+                    <input name="join_code" id="gcode" type="text"></input>
+                    <br></br>
                     <button onClick={guestSubmit} type="submit" >Start Game!</button>
                 </form>
             </div>
