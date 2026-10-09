@@ -150,14 +150,14 @@ async function requestData() {
 
     refreshVals = await response.json()
     console.log(refreshVals)
-    // does nothing if refreshVals.won === true 
-    // redirect to a won state / page? ~~do we have one?~~
-    // apparently yes we do it's part of this page 
     // do we also add the terminal to the data? we would have to shift everything down 
     updateLight()
     //expects a JSON object like this:
     //{"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
     //"light" can be "red", "green", "blue", or "off"
+    if(refreshVals.won === true) {
+        document.getElementById("winscreen").style.display = "block"
+    } 
 }
 
 function updateLight() {
