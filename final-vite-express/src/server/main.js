@@ -218,6 +218,32 @@ async function run() {
 
 // digital player endpoints
 
+    // done but untested
+    app.post("digital/refresh", async (req, res) => { 
+        if(games != null) {
+            const game = await games.findOne({game_id: {$eq: req.session.join_code}})
+            // the digital player needs the dials, the light color, and whether the game is won
+                const data = { 
+                    dials: game.dials,
+                    color: game.color,
+                    won: game.won
+                }
+                res.json(data)
+            }
+    })
+
+        // done and untested 
+    app.patch("digital/terminal", async (req, res) => {
+        if(games != null) {
+            const terminal = req.body.terminal
+
+            const result = await games.updateOne(
+                {game_id: {$eq: req.session.join_code}}, 
+                { $set: {terminal: terminal}}
+            )
+        }
+    })
+
 // helper functions 
 // TODO: uniqueness check
     function pick_code() {
