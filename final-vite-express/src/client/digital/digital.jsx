@@ -225,6 +225,12 @@ addEventListener("keydown", (event) => {
 
         //TODO send thing to server
     }
+
+    /* to test winscreen. obviously, this should not work in production. 
+    else if (event.key === "Shift"){
+        document.getElementById("winscreen").style.display = "block"
+    }
+    */
 })
 
 function updateTerminal() {
@@ -479,6 +485,8 @@ export default function DigitalPage() {
                 <img src="images/cage-light-green.png" className="cageLight" id="cage-light-green"/>
                 <img src="images/cage-light-blue.png" className="cageLight" id="cage-light-blue"/>
                 <img src="images/cage-light-off.png" className="cageLight" id="cage-light-off"/>
+
+                <img src="images/winscreen.png" className="winscreen" id="winscreen"/>
             </div>
         </div>
 );
