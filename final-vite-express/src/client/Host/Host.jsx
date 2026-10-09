@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"
 
 export default function HostLobby() {
     const [myUsername, setMyUsername] = useState('')
@@ -17,10 +18,16 @@ export default function HostLobby() {
         clearTimeout(timer)
         console.log('Refreshing')
 
-        const response = await (await fetch('/refresh')).json()
-        console.log(response)
-        setGuestRole(response.other_role)
-        setGuestUsername(response.other_user)
+        const response = await fetch(`lobby/refresh`, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' }
+            })
+        const json = await response.json()
+        setMyRole(json.host_role)
+        setMyUsername(json.host_name)
+        setGuestRole(json.guest_role)
+        setGuestUsername(json.guest_name)
+        setJoinCode(json.join_code)
 
         timer = setTimeout(() => { refresh() }, refreshMsec)
     }
@@ -59,12 +66,18 @@ export default function HostLobby() {
             </main>
         )
     }
-    // TODO: Handle if the other role is 'analog' or 'digital'
+    async function startGame() {
+        const response = await fetch("/lobby/start", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        // navigate to analog/digital depending on my role
+    }
 
     async function decideRole(chosen_role) {
         const body = JSON.stringify({ "chosen_role": chosen_role })
         const response = await fetch("/lobby/assign", {
-            method: 'POST',
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body
         })

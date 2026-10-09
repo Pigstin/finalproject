@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router"
 
 export default function SetupPage() {
     const [myRole, setMyRole] = useState('none')
     const [myUsername, setMyUsername] = useState('')
+    const navigate = useNavigate()
 
     function FirstPage() {
         return (
@@ -16,14 +18,18 @@ export default function SetupPage() {
 
     function HostUsernameEntry() {
 
-        // This probably won't get used
-        async function createGame(event) {
+        async function hostSubmit(event) {
             event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            console.log(formData.get('username'))
-            setMyUsername(formData.get('username'))
-            //TODO : Call the server to create a game document
-            //Assuming Creating game is successful
+            const name = document.querySelector("#huser").value
+            console.log(name)
+            const response = await fetch('lobby/create', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body : JSON.stringify({
+                    username: name,
+                }),
+            })
+            navigate("/host")
         }
 
         return (
@@ -33,16 +39,32 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/create'} method="post">
-                    <input name="username" type="text"></input>
+                <form id="host_form">
+                    <input name="username" id="huser" type="text"></input>
                     <output>Enter Username</output>
-                    <button type="submit" >Start Game!</button>
+                    <button onClick={hostSubmit} id="submit" >Start Game!</button>
                 </form>
             </div>
         )
     }
 
     function GuestUsernameEntry() {
+        async function guestSubmit(event) {
+            event.preventDefault()
+            const name = await document.querySelector("#guser").value, 
+            code = await document.querySelector("#gcode").value
+            fetch('lobby/join', {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body : JSON.stringify({
+                    username: name,
+                    join_code: code
+                }),
+            })
+            setMyUsername(name)
+            navigate("/guest")
+        }
+
         return (
             <div hidden={myRole !== 'AlmostGuest'} >
                 <header>
@@ -50,14 +72,14 @@ export default function SetupPage() {
                         <button onClick={() => setMyRole('none')}>Back</button>
                     </nav>
                 </header>
-                <form action={'lobby/join'} method="post">
-                    <input name="username" type="text"></input>
+                <form method="post">
+                    <input name="username" id="guser" type="text"></input>
                     <output>Username</output>
 
-                    <input name="join_code" type="text"></input>
+                    <input name="join_code" id="gcode" type="text"></input>
                     <output>Join Code</output>
 
-                    <button type="submit" >Start Game!</button>
+                    <button onClick={guestSubmit} type="submit" >Start Game!</button>
                 </form>
             </div>
         )
