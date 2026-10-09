@@ -73,7 +73,6 @@ function draw(timestamp) {
             p_b = refreshVals["b"]
             p_C = refreshVals["C"]
             p_c = refreshVals["c"]
-            //TODO light here
         }
 
         //fade previous data
@@ -146,6 +145,7 @@ async function requestData() {
     })
 
     refreshVals = await response.json()
+    updateLight()
     //expects a JSON object like this:
     //{"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
     //"light" can be "red", "green", "blue", or "off"
@@ -223,7 +223,7 @@ addEventListener("keydown", (event) => {
         terminalStringCurrent = ""
         updateTerminal()
 
-        //TODO send thing to server
+        //TODO send msgJSON to the server right here
     }
 
     /* to test winscreen. obviously, this should not work in production. 
