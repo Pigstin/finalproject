@@ -56,6 +56,9 @@ export default function HostLobby() {
         return (
             <main>
                 <h1>You will play as the analog character!</h1>
+                <p>
+                    Frequency Freak is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
+                </p>
                 <button onClick={startGame}>Start</button>
             </main>
         )
@@ -64,6 +67,9 @@ export default function HostLobby() {
         return (
             <main>
                 <h1>You will play as the digital character!</h1>
+                <p>
+                    Frequency Freak is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
+                </p>
                 <button onClick={startGame}>Start</button>
             </main>
         )

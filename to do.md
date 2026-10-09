@@ -1,6 +1,6 @@
 # to do 
 
-- [ ] styling pass (lobby stuff)
+- [x] styling pass (lobby stuff)
 - [x] hook up digital api endpoints 
     (they exist serverside, check for clientside)
 - [x] guest start button -
@@ -9,7 +9,7 @@
   - [x] getting refresh data 
   - [x] sending terminal data
   - [x]  terminal data on analog not scaling, just being replaced
-    - this doesnt and wont work,, consider it done   
+    - this doesnt and wont work, consider it done   
 - [ ] record video 1:00 - 2:00 (?)
 - [ ] deploy site on render
 - [ ] pull request to submit --do tomorrow(?)  
