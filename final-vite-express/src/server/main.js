@@ -22,16 +22,16 @@ async function run() {
 
     let lobbies = await client.db("webware-final").collection("lobbies")
     let games = await client.db("webware-final").collection("games")
-    
+
     // middleware
     app.use(express.static('public'))
 
     // logger function 
-    app.use((req, res, next) => {
-        const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
-        console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
-        next()
-    })
+    // app.use((req, res, next) => {
+    //     const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
+    //     console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
+    //     next()
+    // })
     // player connection endpoints 
 
     // done and tested
@@ -259,7 +259,7 @@ async function run() {
     // done, tested
     app.post("/digital/refresh", async (req, res) => {
         // if games is null this never responds with anything
-        if (games != null) { 
+        if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
             // the digital player needs the dials, the light color, and whether the game is won
             // also needs the terminal to recieve (or send )

@@ -110,8 +110,6 @@ export default function StoneTablet() {
             }
 
             setTargetSymbol(nextSymbol)
-
-            // TODO: fetch request to update server data
         }
 
         return (
