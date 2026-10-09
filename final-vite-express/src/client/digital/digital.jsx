@@ -24,6 +24,9 @@ function loadJS() {
         updateTerminal()
         //place light (off to start)
         updateLight()
+        // setup interval for requesting new data 
+        // requests new data every 1900 seconds
+        setInterval(requestData, 1900); 
 
         prevTime = document.timeline.currentTime
         requestAnimationFrame(draw)
@@ -135,16 +138,19 @@ function draw(timestamp) {
     requestAnimationFrame(draw)
 }
 
-//requests new data every 1900 seconds
-// setInterval(requestData, 1900); //TODO re-enable once endpoints exist properly
-
 async function requestData() {
 
-    const response = await fetch( '/refresh/digital', {
-        method:'GET'
+    const response = await fetch( '/digital/refresh/', {
+        method:'POST',
+        headers: {"Content-Type": "application/json"}
     })
 
     refreshVals = await response.json()
+    console.log(refreshVals)
+    // does nothing if refreshVals.won === true 
+    // redirect to a won state / page? ~~do we have one?~~
+    // apparently yes we do it's part of this page 
+    // do we also add the terminal to the data? we would have to shift everything down 
     updateLight()
     //expects a JSON object like this:
     //{"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
@@ -214,16 +220,24 @@ addEventListener("keydown", (event) => {
     }
     //if the player sends a message:
     else if ((event.key === "Enter") || (event.key === "Return")) {
-        //prepare message json
-        let msgJSON = {"msg": terminalStringCurrent}
+        // send message to server 
+        // lambda function who's sole purpose is to update a resource 
+        // it is okay that this is here as we don't need to wait on it 
+        (async () => {
+        const response = await fetch( '/digital/terminal/', {
+            method:'PATCH',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "terminal" : `${terminalStringCurrent}`
+            })
+        })
+        })();
 
         //update visuals of terminal
         terminalString1 = terminalString2
         terminalString2 = terminalStringCurrent
         terminalStringCurrent = ""
         updateTerminal()
-
-        //TODO send msgJSON to the server right here
     }
 
     /* to test winscreen. obviously, this should not work in production. 
@@ -271,18 +285,25 @@ function updateInfoScreen() {
         drawInfoWave(waveNumber)
         //display the correct vector image
         //i'm sure there's a way to do this better. but it's fiiiiiiine. 
-        if (infoScreenIndex === 3) {document.getElementById("vector-n").style.display = "block"}
-        else if (infoScreenIndex === 4) {document.getElementById("vector-e").style.display = "block"}
-        else if (infoScreenIndex === 5) {document.getElementById("vector-s").style.display = "block"}
-        else if (infoScreenIndex === 6) {document.getElementById("vector-w").style.display = "block"}
-        else if (infoScreenIndex === 7) {document.getElementById("vector-nne").style.display = "block"}
-        else if (infoScreenIndex === 8) {document.getElementById("vector-ene").style.display = "block"}
-        else if (infoScreenIndex === 9) {document.getElementById("vector-ese").style.display = "block"}
-        else if (infoScreenIndex === 10) {document.getElementById("vector-sse").style.display = "block"}
-        else if (infoScreenIndex === 11) {document.getElementById("vector-ssw").style.display = "block"}
-        else if (infoScreenIndex === 12) {document.getElementById("vector-wsw").style.display = "block"}
-        else if (infoScreenIndex === 13) {document.getElementById("vector-wnw").style.display = "block"}
-        else if (infoScreenIndex === 14) {document.getElementById("vector-nnw").style.display = "block"}
+        // found your better way -- artemis 
+
+        // 14 - 3 = 11 
+        let vectorElmIds = ["n","e","s","w","nne","ene","ese","sse","ssw","wsw","wnw","nnw",]
+        if (infoScreenIndex >= 3 && infoScreenIndex <= 14) {
+            document.getElementById(`vector-${vectorElmIds[infoScreenIndex-3]}`).style.display = "block"
+        }
+        // if (infoScreenIndex === 3) {document.getElementById("vector-n").style.display = "block"}
+        // else if (infoScreenIndex === 4) {document.getElementById("vector-e").style.display = "block"}
+        // else if (infoScreenIndex === 5) {document.getElementById("vector-s").style.display = "block"}
+        // else if (infoScreenIndex === 6) {document.getElementById("vector-w").style.display = "block"}
+        // else if (infoScreenIndex === 7) {document.getElementById("vector-nne").style.display = "block"}
+        // else if (infoScreenIndex === 8) {document.getElementById("vector-ene").style.display = "block"}
+        // else if (infoScreenIndex === 9) {document.getElementById("vector-ese").style.display = "block"}
+        // else if (infoScreenIndex === 10) {document.getElementById("vector-sse").style.display = "block"}
+        // else if (infoScreenIndex === 11) {document.getElementById("vector-ssw").style.display = "block"}
+        // else if (infoScreenIndex === 12) {document.getElementById("vector-wsw").style.display = "block"}
+        // else if (infoScreenIndex === 13) {document.getElementById("vector-wnw").style.display = "block"}
+        // else if (infoScreenIndex === 14) {document.getElementById("vector-nnw").style.display = "block"}
     }
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"
 
 export default function GuestLobby() {
     const [myUsername, setMyUsername] = useState('')
@@ -6,6 +7,7 @@ export default function GuestLobby() {
     const [joinCode, setJoinCode] = useState('1234')
     const [hostUsername, setHostUsername] = useState('GUEST')
     const [hostRole, setHostRole] = useState('none')
+    const navigate = useNavigate()
     let timer;
     const refreshMsec = 3000
 
@@ -43,7 +45,7 @@ export default function GuestLobby() {
         return (
             <main>
                 <h1>You will play as the digital character!</h1>
-                <button>Start</button>
+                <button onClick={startGame}>Start</button>
             </main>
         )
     }
@@ -51,7 +53,7 @@ export default function GuestLobby() {
         return (
             <main>
                 <h1>You will play as the analog character!</h1>
-                <button>Start</button>
+                <button onClick={startGame}>Start</button>
             </main>
         )
     }
@@ -62,6 +64,8 @@ export default function GuestLobby() {
             headers: { 'Content-Type': 'application/json' }
         })
         // navigate to analog/digital depending on my role
+        console.log(`attempting to navigate to /${myRole}`)
+        navigate(`/${myRole}`)
     }
     // TODO: Handle if the other role is 'analog' or 'digital'
 }

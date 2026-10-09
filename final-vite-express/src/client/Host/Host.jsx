@@ -64,7 +64,7 @@ export default function HostLobby() {
         return (
             <main>
                 <h1>You will play as the digital character!</h1>
-                <button>Start</button>
+                <button onClick={startGame}>Start</button>
             </main>
         )
     }
