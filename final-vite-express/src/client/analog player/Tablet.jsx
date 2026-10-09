@@ -92,11 +92,12 @@ export default function StoneTablet() {
             if (number === targetSymbol) {
                 console.log('Correct Guess!')
                 setScore(score + 1)
-
+                fetch('/analog/score', { method: 'PATCH' })
             }
             else {
                 console.log('Incorrect Guess')
                 setScore(0)
+                fetch('/analog/wipe', { method: 'PATCH' })
             }
 
             // Set new target symbol

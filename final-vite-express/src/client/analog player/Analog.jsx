@@ -4,6 +4,7 @@ import StatusLightSwitch from "./StatusLight";
 import style from "./Analog.module.css"
 import Printer from "./Printer";
 import StoneTablet from "./Tablet";
+import winmage from "./assets/AquaAeroWinScreen.png"
 
 export default function AnalogScreen() {
     const [aAmp, set_aAmp] = useState(1)
@@ -40,19 +41,23 @@ export default function AnalogScreen() {
     }, [])
 
 
-    return (
-        <main className={style.mainArea}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", backgroundColor: 'silver', border: 'outset 4px gray' }}>
-                <WaveBox aAmp={aAmp} bAmp={bAmp} cAmp={cAmp} set_aAmp={set_aAmp} set_bAmp={set_bAmp} set_cAmp={set_cAmp}
-                    aPhase={aPhase} bPhase={bPhase} cPhase={cPhase} set_aPhase={set_aPhase} set_bPhase={set_bPhase} set_cPhase={set_cPhase} />
-                <div style={{ display: "flex", flexDirection: "row", gap: "20px" }} >
-                    <StatusLightSwitch color={color} setColor={setColor} />
-                    <TransmitButton />
+    if (!won)
+        return (
+            <main className={style.mainArea}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", backgroundColor: 'silver', border: 'outset 4px gray' }}>
+                    <WaveBox aAmp={aAmp} bAmp={bAmp} cAmp={cAmp} set_aAmp={set_aAmp} set_bAmp={set_bAmp} set_cAmp={set_cAmp}
+                        aPhase={aPhase} bPhase={bPhase} cPhase={cPhase} set_aPhase={set_aPhase} set_bPhase={set_bPhase} set_cPhase={set_cPhase} />
+                    <div style={{ display: "flex", flexDirection: "row", gap: "20px" }} >
+                        <StatusLightSwitch color={color} setColor={setColor} />
+                        <TransmitButton />
+                    </div>
                 </div>
-            </div>
-            <StoneTablet />
-            <Printer message={message} />
-        </main>
+                <StoneTablet />
+                <Printer message={message} />
+            </main>
+        )
+    else return (
+        <img src={winmage}></img>
     )
 
     // Printer will only display latest message because it just will not work otherwise

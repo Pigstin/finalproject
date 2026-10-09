@@ -23,11 +23,20 @@ export default function StatusLightSwitch({ color, setColor }) {
         <article className={styles.statusLight}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
                 <div className={styles.led} style={ledStyle}></div>
-                <button className={styles.resetButton} onClick={() => setColor('none')}>Reset</button>
+                <button className={styles.resetButton} onClick={() => colorChosen('none')}>Reset</button>
             </div>
-            <button><img src={buttonSprite} onClick={() => setColor('red')} /></button>
-            <button><img src={buttonSprite} onClick={() => setColor('green')} /></button>
-            <button><img src={buttonSprite} onClick={() => setColor('blue')} /></button>
+            <button><img src={buttonSprite} onClick={() => colorChosen('red')} /></button>
+            <button><img src={buttonSprite} onClick={() => colorChosen('green')} /></button>
+            <button><img src={buttonSprite} onClick={() => colorChosen('blue')} /></button>
         </article>
     )
+
+    function colorChosen(color) {
+        setColor(color)
+        fetch('/analog/color', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ color: color })
+        })
+    }
 }

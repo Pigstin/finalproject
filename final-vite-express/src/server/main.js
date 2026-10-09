@@ -174,7 +174,7 @@ async function run() {
 
     // analog player endpoints 
 
-    // done but untested
+    // done, untested
     app.post("/analog/refresh", async (req, res) => {
         if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
@@ -187,7 +187,7 @@ async function run() {
         }
     })
 
-    // done and untested 
+    // done, tested 
     app.patch("/analog/dials", async (req, res) => {
         if (games != null) {
             const values = req.body.values
@@ -203,8 +203,8 @@ async function run() {
 
     })
 
-    // done but untested
-    app.patch("analog/color", async (req, res) => {
+    // done, tested
+    app.patch("/analog/color", async (req, res) => {
         if (games != null) {
             const color = req.body.color
 
@@ -212,34 +212,50 @@ async function run() {
                 { game_id: { $eq: req.session.join_code } },
                 { $set: { color: color } }
             )
+            res.writeHead(201, 'OK')
+            res.send()
         }
 
     })
 
     // done but untested 
-    app.patch("analog/score", async (req, res) => {
+    app.patch("/analog/score", async (req, res) => {
         if (games != null) {
             const result = await games.updateOne(
                 { game_id: { $eq: req.session.join_code } },
                 { $inc: { right_guesses: 1 } }
             )
+
+            // See if game won
+            const myGame = await games.findOne({ game_id: { $eq: req.session.join_code } })
+            if (myGame.right_guesses >= 3) {
+                const winResult = await games.updateOne(
+                    { game_id: { $eq: req.session.join_code } },
+                    { $set: { won: true } }
+                )
+            }
+
+            res.writeHead(201, 'OK')
+            res.send()
         }
     })
 
     // done but untested 
-    app.patch("analog/wipe", async (req, res) => {
+    app.patch("/analog/wipe", async (req, res) => {
         if (games != null) {
             const result = await games.updateOne(
                 { game_id: { $eq: req.session.join_code } },
                 { $set: { right_guesses: 0 } }
             )
         }
+        res.writeHead(201, 'OK')
+        res.send()
     })
 
     // digital player endpoints
 
     // done but untested
-    app.post("digital/refresh", async (req, res) => {
+    app.post("/digital/refresh", async (req, res) => {
         if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
             // the digital player needs the dials, the light color, and whether the game is won
@@ -253,7 +269,7 @@ async function run() {
     })
 
     // done and untested 
-    app.patch("digital/terminal", async (req, res) => {
+    app.patch("/digital/terminal", async (req, res) => {
         if (games != null) {
             const terminal = req.body.terminal
 
