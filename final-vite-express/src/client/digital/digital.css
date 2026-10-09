@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap');
 
-canvas {
+#oscCanvas {
     border: 1px solid black;
     position: absolute;
-    top: 11.5277777777%; /* 83px / 720 */
-    left: 60.078125%; /* 769px / 1280*/
-    width: 29.140625%; /* 373px / 1280 */
-    height: 30.277777777%; /* 218px / 720 */
+    top: 11.5277777777%;
+    /* 83px / 720 */
+    left: 60.078125%;
+    /* 769px / 1280*/
+    width: 29.140625%;
+    /* 373px / 1280 */
+    height: 30.277777777%;
+    /* 218px / 720 */
 }
 
 .infoImage {
@@ -33,10 +37,12 @@ canvas {
     font-size: 1.25cqw;
     line-height: 0.6;
 }
+
 /*hacky way to make text scale properly regardless of aspect ratio*/
 @media (min-aspect-ratio: 16/9) {
     .infoText {
-        font-size: 2.22222222cqh; /* previous font size (in cqw) * 16 / 9 */
+        font-size: 2.22222222cqh;
+        /* previous font size (in cqw) * 16 / 9 */
     }
 }
 
@@ -45,7 +51,8 @@ canvas {
     top: 7%;
     left: 49%;
     width: 9.375%;
-    height: 36.11111%; /*width * 16 / 9 / 120 * 260*/
+    height: 36.11111%;
+    /*width * 16 / 9 / 120 * 260*/
 }
 
 .terminalText {
@@ -54,18 +61,23 @@ canvas {
     width: 30%;
     font-size: 2cqw;
 }
+
 /*hacky way to make text scale properly regardless of aspect ratio*/
 @media (min-aspect-ratio: 16/9) {
     .terminalText {
-        font-size: 3.555555cqh; /* previous font size (in cqw) * 16 / 9 */
+        font-size: 3.555555cqh;
+        /* previous font size (in cqw) * 16 / 9 */
     }
 }
+
 #terminalText1 {
     top: 61.5%
 }
+
 #terminalText2 {
     top: 67.5%
 }
+
 #terminalText3 {
     top: 73.5%
 }
@@ -73,6 +85,7 @@ canvas {
 .backgroundImage {
     width: 100cqw;
 }
+
 /*if the window is too wide, base image size off the hight instead*/
 @media (min-aspect-ratio: 16/9) {
     .backgroundImage {
@@ -106,8 +119,8 @@ canvas {
     font-weight: 400;
     font-style: normal;
     font-variation-settings:
-    "BLED" 0,
-    "SCAN" 0;
+        "BLED" 0,
+        "SCAN" 0;
 }
 
 /*
@@ -134,14 +147,16 @@ from index.css:
 }
 
 attempted bangage solutions: */
-.DigitalPage { 
+.DigitalPage {
     text-align: start;
-    color: rgb(255,255,255);
+    color: rgb(255, 255, 255);
 }
+
 /*unfortunately, can't remove root padding without telling root directly. */
 :root {
     padding: 0;
 }
+
 /*also, if i wanted the screen to be centered:
 body {
     justify-content: center;

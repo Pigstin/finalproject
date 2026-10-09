@@ -7,6 +7,7 @@ export default function HostLobby() {
     const [joinCode, setJoinCode] = useState('1234')
     const [GuestUsername, setGuestUsername] = useState('GUEST')
     const [guestRole, setGuestRole] = useState('none')
+    const navigate = useNavigate()
     let timer;
     const refreshMsec = 3000
 
@@ -16,13 +17,14 @@ export default function HostLobby() {
 
     async function refresh() {
         clearTimeout(timer)
-        console.log('Refreshing')
+        // console.log('Refreshing')
 
         const response = await fetch(`lobby/refresh`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' }
-            })
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' }
+        })
         const json = await response.json()
+        console.log(json)
         setMyRole(json.host_role)
         setMyUsername(json.host_name)
         setGuestRole(json.guest_role)
@@ -54,7 +56,7 @@ export default function HostLobby() {
         return (
             <main>
                 <h1>You will play as the analog character!</h1>
-                <button>Start</button>
+                <button onClick={startGame}>Start</button>
             </main>
         )
     }
@@ -72,6 +74,8 @@ export default function HostLobby() {
             headers: { 'Content-Type': 'application/json' }
         })
         // navigate to analog/digital depending on my role
+        console.log(`attempting to navigate to /${myRole}`)
+        navigate(`/${myRole}`)
     }
 
     async function decideRole(chosen_role) {

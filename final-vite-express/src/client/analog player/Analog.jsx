@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import WaveBox from "./Wavebox";
 import StatusLightSwitch from "./StatusLight";
 import style from "./Analog.module.css"
@@ -15,8 +15,29 @@ export default function AnalogScreen() {
 
     const [color, setColor] = useState('none')
 
-    const [messages, setMessages] = useState([{ key: -3, msg: "For" }, { key: -2, msg: "Pete's" }, { key: -1, msg: "Sake" }])
+    const [messages, setMessages] = useState([{ key: 0, msg: " " }])
+    const [message, setMessage] = useState("")
     const [mesKey, setMesKey] = useState(0)
+
+    const [won, setWon] = useState(false)
+
+    let refreshTimer;
+    const refreshMsec = 3000;
+    async function refresh() {
+        clearTimeout(refreshTimer)
+        const data = await (await fetch('/analog/refresh', { method: 'POST' })).json()
+        console.log(data)
+
+        setMesKey(mesKey + 1)
+        setMessage(data.terminal)
+        setWon(data.won)
+
+        refreshTimer = setTimeout(() => { refresh() }, refreshMsec)
+    }
+
+    useEffect(() => {
+        refresh()
+    }, [])
 
 
     return (
@@ -30,11 +51,11 @@ export default function AnalogScreen() {
                 </div>
             </div>
             <StoneTablet />
-            <Printer messages={messages} />
+            <Printer message={message} />
         </main>
     )
 
-    // TODO : Call this in refresh, passing in terminal value
+    // Printer will only display latest message because it just will not work otherwise
     function newMessageReceived(latestMessage) {
         // Super janky, but check if the latest message is different from the last message in the array
         if (latestMessage !== messages.at(messages.length - 1).msg) {
@@ -69,12 +90,16 @@ export default function AnalogScreen() {
 
             setTimeout(() => { setLightStyle(lightOffStyle) }, 3000)
 
-            //TODO: send over all the needed data
-
+            //Send over all the needed data
             let data = {
-                dials: { A: aAmp, a: aPhase, B: bAmp, b: bPhase, C: cAmp, c: cPhase },
-                color: color,
+                values: { A: aAmp, a: aPhase, B: bAmp, b: bPhase, C: cAmp, c: cPhase }
             }
+
+            fetch('/analog/dials', {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
         }
 
         return (
