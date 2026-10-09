@@ -25,9 +25,9 @@ export default function StatusLightSwitch({ color, setColor }) {
                 <div className={styles.led} style={ledStyle}></div>
                 <button className={styles.resetButton} onClick={() => colorChosen('none')}>Reset</button>
             </div>
-            <button><img src={buttonSprite} onClick={() => colorChosen('red')} /></button>
-            <button><img src={buttonSprite} onClick={() => colorChosen('green')} /></button>
-            <button><img src={buttonSprite} onClick={() => colorChosen('blue')} /></button>
+            <button><div style={{ backgroundColor: 'red', border: 'solid 4px rgb(172, 0, 0)' }} onClick={() => colorChosen('red')}></div></button>
+            <button><div style={{ backgroundColor: 'lime', border: 'solid 4px rgb(0, 172, 0)' }} onClick={() => colorChosen('green')}></div></button>
+            <button><div style={{ backgroundColor: 'blue', border: 'solid 4px rgb(0, 0, 172)' }} onClick={() => colorChosen('blue')}></div></button>
         </article>
     )
 

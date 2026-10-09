@@ -13,9 +13,10 @@
         background-color: rgba(1, 1, 1, 0);
         border: none;
 
-        img {
+        div {
             width: 75px;
             height: 75px;
+            border-radius: 100%;
 
             &:hover {
                 box-shadow: 0px 0px 10px yellow;
