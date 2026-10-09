@@ -26,11 +26,12 @@ async function run() {
     app.use(express.static('public'))
 
     // logger function 
-    // app.use((req, res, next) => {
-    //     const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
-    //     console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
-    //     next()
-    // })
+    app.use((req, res, next) => {
+        // const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
+        // console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
+        console.log(`URL: ${req.url}`)
+        next()
+    })
     // player connection endpoints 
 
     // done and tested
