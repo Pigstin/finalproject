@@ -40,6 +40,14 @@ canvas {
     }
 }
 
+.cageLight {
+    position: absolute;
+    top: 7%;
+    left: 49%;
+    width: 9.375%;
+    height: 36.11111%; /*width * 16 / 9 / 120 * 260*/
+}
+
 .terminalText {
     position: absolute;
     left: 64%;

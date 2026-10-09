@@ -22,6 +22,8 @@ function loadJS() {
         updateInfoScreen()
         //make terminal normal
         updateTerminal()
+        //place light (off to start)
+        updateLight()
 
         prevTime = document.timeline.currentTime
         requestAnimationFrame(draw)
@@ -44,7 +46,7 @@ let p_C = 0
 let p_c = 0
 //these values are updated whenever refresh data is obtained. 
 //p_X values are set equal to these every 2 seconds. set to defaults here to start off
-let refreshVals = {"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "red"}
+let refreshVals = {"A": 1, "a": 0, "B": 0, "b": 0, "C": 0, "c": 0, "light": "off"}
 
 function draw(timestamp) {
     //constants
@@ -149,6 +151,28 @@ async function requestData() {
     //"light" can be "red", "green", "blue", or "off"
 }
 
+function updateLight() {
+    //first, disable all lights
+    //list of every element in class "cageLight"
+    const allLights = document.getElementsByClassName("cageLight")
+    //loop through all elements
+    for (const light of allLights) {
+        //visually disable this element
+        light.style.display = "none"
+    }
+
+    //then, enable the correct light
+    if (refreshVals["light"] === "red") {
+        document.getElementById("cage-light-red").style.display = "block"
+    } else if (refreshVals["light"] === "green") {
+        document.getElementById("cage-light-green").style.display = "block"
+    } else if (refreshVals["light"] === "blue") {
+        document.getElementById("cage-light-blue").style.display = "block"
+    } else if (refreshVals["light"] === "off") {
+        document.getElementById("cage-light-off").style.display = "block"
+    }
+}
+
 const terminalCharacterLimit = 13;
 let terminalString1 = undefined
 let terminalString2 = undefined
@@ -198,7 +222,7 @@ addEventListener("keydown", (event) => {
         terminalString2 = terminalStringCurrent
         terminalStringCurrent = ""
         updateTerminal()
-        
+
         //TODO send thing to server
     }
 })
@@ -450,6 +474,11 @@ export default function DigitalPage() {
                 <p className="terminalText coolFont" id="terminalText1"></p>
                 <p className="terminalText coolFont" id="terminalText2"></p>
                 <p className="terminalText coolFont" id="terminalText3">&gt;_</p>
+
+                <img src="images/cage-light-red.png" className="cageLight" id="cage-light-red"/>
+                <img src="images/cage-light-green.png" className="cageLight" id="cage-light-green"/>
+                <img src="images/cage-light-blue.png" className="cageLight" id="cage-light-blue"/>
+                <img src="images/cage-light-off.png" className="cageLight" id="cage-light-off"/>
             </div>
         </div>
 );
