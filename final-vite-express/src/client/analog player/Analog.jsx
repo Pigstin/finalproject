@@ -37,6 +37,7 @@ export default function AnalogScreen() {
     }
 
     useEffect(() => {
+        document.title = "Solve the Puzzle - Lost In Transmission"
         refresh()
     }, [])
 

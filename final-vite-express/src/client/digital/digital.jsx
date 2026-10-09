@@ -11,6 +11,9 @@ function loadJS() {
         ranBefore = true
         console.log("omg jabascribt")
 
+        // Set page title
+        document.title = "Solve The Puzzle - Lost In Transmission"
+
         //setup for oscilloscope canvas
         oscCanvas = document.getElementById("oscCanvas");
         oscCtx = oscCanvas.getContext("2d");

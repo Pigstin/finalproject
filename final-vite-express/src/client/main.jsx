@@ -2,7 +2,7 @@ import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter,createBrowserRouter, RouterProvider } from "react-router"
+import { BrowserRouter, createBrowserRouter, RouterProvider } from "react-router"
 
 import SetupPage from "./Setup";
 import HostLobby from "./Host/Host";
@@ -38,10 +38,10 @@ const router = createBrowserRouter([
   {
     path: '/charlotteTest',
     element: <CharlotteTestZone />
-  }, 
+  },
   {
     path: '/digital',
-    element: <DigitalPage/>
+    element: <DigitalPage />
   },
   {
     path: '/light',

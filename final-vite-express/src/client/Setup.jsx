@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router"
 
 export default function SetupPage() {
@@ -6,10 +6,14 @@ export default function SetupPage() {
     const [myUsername, setMyUsername] = useState('')
     const navigate = useNavigate()
 
+    useEffect(() => {
+        document.title = "Lost In Transmission"
+    }, [])
+
     function FirstPage() {
         return (
             <div hidden={myRole !== 'none'}>
-                <h1>Frequency Freak</h1>
+                <h1>Lost In Transmission</h1>
                 <button onClick={() => setMyRole('AlmostHost')}>Host Game</button>
                 <button onClick={() => setMyRole('AlmostGuest')}>Join Game</button>
             </div>
@@ -25,7 +29,7 @@ export default function SetupPage() {
             const response = await fetch('lobby/create', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body : JSON.stringify({
+                body: JSON.stringify({
                     username: name,
                 }),
             })
@@ -40,7 +44,7 @@ export default function SetupPage() {
                     </nav>
                 </header>
                 <form id="host_form">
-                    <output>Enter Username</output> 
+                    <output>Enter Username</output>
                     <input name="username" id="huser" type="text"></input>
                     <br></br>
                     <button onClick={hostSubmit} id="submit" >Start Game!</button>
@@ -52,12 +56,12 @@ export default function SetupPage() {
     function GuestUsernameEntry() {
         async function guestSubmit(event) {
             event.preventDefault()
-            const name = await document.querySelector("#guser").value, 
-            code = await document.querySelector("#gcode").value
+            const name = await document.querySelector("#guser").value,
+                code = await document.querySelector("#gcode").value
             fetch('lobby/join', {
                 method: "PATCH",
                 headers: { 'Content-Type': 'application/json' },
-                body : JSON.stringify({
+                body: JSON.stringify({
                     username: name,
                     join_code: code
                 }),

@@ -13,16 +13,19 @@ export default function GuestLobby() {
 
     // Called every few seconds to fetch data from the server/database
 
-    useEffect(() => { refresh() }, [])
+    useEffect(() => {
+        refresh()
+        document.title = "Waiting for Host - Lost In Transmission"
+    }, [])
 
     async function refresh() {
         clearTimeout(timer)
         console.log('Refreshing')
 
         const response = await fetch(`lobby/refresh`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' }
-            })
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' }
+        })
         const json = await response.json()
         console.log(json)
         setMyRole(json.guest_role)
@@ -46,7 +49,7 @@ export default function GuestLobby() {
             <main>
                 <h1>You will play as the digital character!</h1>
                 <p>
-                    Frequency Freak is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
+                    Lost In Transmission is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
                 </p>
                 <button onClick={startGame}>Start</button>
             </main>
@@ -57,7 +60,7 @@ export default function GuestLobby() {
             <main>
                 <h1>You will play as the analog character!</h1>
                 <p>
-                    Frequency Freak is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
+                    Lost In Transmission is a multiplayer game about communicating information. For the best experience, please don't communicate with your partner directly during the game, through text or otherwise. The game will provide you with means to communicate.
                 </p>
                 <button onClick={startGame}>Start</button>
             </main>
