@@ -1,8 +1,7 @@
 import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
-import { redirect } from "react-router";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
 
