@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 
+const API_LINK = import.meta.env.API_LINK
+
 export default function GuestLobby() {
     const [myUsername, setMyUsername] = useState('')
     const [myRole, setMyRole] = useState('host')
@@ -22,7 +24,7 @@ export default function GuestLobby() {
         clearTimeout(timer)
         console.log('Refreshing')
 
-        const response = await fetch(`lobby/refresh`, {
+        const response = await fetch(`${API_LINK}/lobby/refresh`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
@@ -68,7 +70,7 @@ export default function GuestLobby() {
     }
 
     async function startGame() {
-        const response = await fetch("/lobby/start", {
+        const response = await fetch(`${API_LINK}/lobby/start`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })

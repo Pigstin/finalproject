@@ -1,5 +1,8 @@
+import { application } from "express";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
+
+const API_LINK = import.meta.env.API_LINK
 
 export default function HostLobby() {
     const [myUsername, setMyUsername] = useState('')
@@ -22,7 +25,7 @@ export default function HostLobby() {
         clearTimeout(timer)
         // console.log('Refreshing')
 
-        const response = await fetch(`lobby/refresh`, {
+        const response = await fetch(`${API_LINK}/lobby/refresh`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' }
         })
@@ -78,7 +81,7 @@ export default function HostLobby() {
         )
     }
     async function startGame() {
-        const response = await fetch("/lobby/start", {
+        const response = await fetch(`${API_LINK}/lobby/start`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -89,7 +92,7 @@ export default function HostLobby() {
 
     async function decideRole(chosen_role) {
         const body = JSON.stringify({ "chosen_role": chosen_role })
-        const response = await fetch("/lobby/assign", {
+        const response = await fetch(`${API_LINK}/lobby/assign`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body

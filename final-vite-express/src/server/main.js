@@ -27,9 +27,13 @@ async function run() {
 
     // logger function 
     app.use((req, res, next) => {
-        // const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
-        // console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
-        console.log(`URL: ${req.url}`)
+        try {
+            const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
+            console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
+        } catch {
+            console.log(`URL: ${req.url}`)
+        }
+        // try catch here for handling if outdated node environment        
         next()
     })
     // player connection endpoints 
@@ -93,7 +97,7 @@ async function run() {
     })
 
     // done and tested
-    app.post("/lobby/refresh", async (req, res) => {
+    app.get("/lobby/refresh", async (req, res) => {
         if (lobbies != null) {
             const lobby = await lobbies.findOne({ join_code: { $eq: req.session.join_code } })
             // if user is host...
@@ -177,7 +181,7 @@ async function run() {
     // analog player endpoints 
 
     // done, untested
-    app.post("/analog/refresh", async (req, res) => {
+    app.get("/analog/refresh", async (req, res) => {
         if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
             // the analog player needs the terminal and whether the game's won. 
@@ -257,14 +261,13 @@ async function run() {
     // digital player endpoints
 
     // done, tested
-    app.post("/digital/refresh", async (req, res) => {
+    app.get("/digital/refresh", async (req, res) => {
         // if games is null this never responds with anything
         if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
             // the digital player needs the dials, the light color, and whether the game is won
             // also needs the terminal to recieve (or send )
             const data = {
-                terminal: game.terminal,
                 dials: game.dials,
                 light: game.color,
                 won: game.won
@@ -299,6 +302,6 @@ async function run() {
 
 run()
 
-ViteExpress.listen(app, 3000, () =>
-    console.log("Server is listening on port 3000..."),
+app.listen(process.env.PORT ?? 5000, () =>
+    console.log(`Server is listening on port ${process.env.PORT ?? 5000}...`),
 );
