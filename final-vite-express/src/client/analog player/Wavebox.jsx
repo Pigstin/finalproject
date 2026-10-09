@@ -3,13 +3,13 @@ import './WaveBox.css'
 import { DialInput } from "./Dial";
 import { LineChart, Line, YAxis, XAxis, Tooltip } from 'recharts'
 
-export default function WaveBox() {
-    const [aAmp, set_aAmp] = useState(1)
-    const [aPhase, set_aPhase] = useState(0)
-    const [bAmp, set_bAmp] = useState(0)
-    const [bPhase, set_bPhase] = useState(0)
-    const [cAmp, set_cAmp] = useState(0)
-    const [cPhase, set_cPhase] = useState(0)
+export default function WaveBox(
+    { aAmp, set_aAmp,
+        aPhase, set_aPhase,
+        bAmp, set_bAmp,
+        bPhase, set_bPhase,
+        cAmp, set_cAmp,
+        cPhase, set_cPhase }) {
 
     function degToRad(deg) {
         return deg * (Math.PI / 180)

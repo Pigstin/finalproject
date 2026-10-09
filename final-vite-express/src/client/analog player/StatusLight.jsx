@@ -3,8 +3,7 @@ import styles from "./StatusLight.module.css"
 import buttonSprite from "./assets/Dial.svg"
 console.log(buttonSprite)
 
-export default function StatusLightSwitch() {
-    const [color, setColor] = useState('none')
+export default function StatusLightSwitch({ color, setColor }) {
 
     let ledStyle = (color === 'red') ? {
         backgroundColor: 'red',

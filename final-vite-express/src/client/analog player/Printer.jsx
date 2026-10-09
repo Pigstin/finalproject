@@ -2,9 +2,9 @@ import { useState } from "react";
 import printerSprite from "./assets/Printer.png"
 console.log(printerSprite)
 
-export default function Printer() {
-    const [messages, setMessages] = useState([{ key: 0, msg: 'woaow' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 1, msg: 'holy moly' }, { key: 2, msg: 'BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH BRUH ' }])
-    const [key, setKey] = useState(0)
+export default function Printer({ messages }) {
+    // const [messages, setMessages] = useState(["Oh", "no", "bro"])
+    // const [key, setKey] = useState(0)
 
     const listItems = messages.map((message) => {
         let bruh = <li key={message.key}>{message.msg}</li>

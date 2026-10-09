@@ -20,7 +20,8 @@ export function DialInput({ minVal, maxVal, valueModifier, initVal }) {
         height: dialRadius,
         width: dialRadius,
         // position: 'absolute',
-        opacity: '0%'
+        opacity: '0%',
+        margin: "25px 25px"
     }
 
     function lerp(start, end, pct) {
