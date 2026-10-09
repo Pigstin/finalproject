@@ -1,32 +1,26 @@
-# Final Project
-*Due October 9th by 1:59 PM*
+## image attributions 
 
-For your final project, you'll implement a web application that exhibits understanding of the course materials. 
-This project should provide an opportunity to both be creative and to pursue individual research and learning goals.
+Computer screen: by Harry Munday
+Share-alike 4.0 license
+https://en.wikipedia.org/wiki/File:256-pix-tbc-ld-analyse.png
 
-## General description
-Your project should consist of a complete Web application, exhibiting facets of the three main sections of the course material:
+Because the computer screen was used in the making of "background.png", 
+the file "background.png" within this project is licensable under 
+Creative commons Share-Alike 4.0. Read more about the license below:
+https://creativecommons.org/licenses/by-sa/4.0/
 
-- Static web page content and design. You should have a project that is accessible, easily navigable, and features significant content.
-- Dynamic behavior implemented with JavaScript (TypeScript is also allowed if your group wants to explore it).
-- Server-side programming *using Node.js*. Typically this will take the form of some sort of persistent data (database), authentication, and possibly server-side computation.
-- A video (less than five minutes) where each group member explains some aspect of the project. An easy way to produce this video is for you all the groups members to join a Zoom call that is recorded; each member can share their screen when they discuss the project or one member can "drive" the interface while other members narrate (this second option will probably work better.) The video should be posted on YouTube or some other accessible video hosting service. Make sure your video is less than five minutes, but long enough to successfully  explain your project and show it in action. There is no minimum video length.
+Thumbsup: by Vincent Le Moign
+https://commons.wikimedia.org/wiki/File:375-thumbs-up-1.svg
 
-## Project ideation
-Excellent projects typically serve someone/some group; for this assignment you need to define your users and stakeholders. I encourage you to identify projects that will have impact, either artistically, politically, or in terms of productivity. 
+Cat: by Rosendahl
+https://commons.wikimedia.org/wiki/File:Black_and_white_cat.jpg
 
-### Deliverables
+Confetti: by freepngimg.com
+https://freepngimg.com/png/10428-confetti-png-image
 
-#### Form Team (due 9/11)
-Students are will work in teams of 3-5 students for the project; teams of two can be approved with the permission of the instructor. Working in teams should help enable you to build a good project in a limited amount of time.  Use the `#project-logistics` channel in Discord to pitch ideas for final projects and/or find fellow team members as needed.
-
-Teams must be in place by end of day on Friday, September 11th. If you have not identified a team at this point, you will be assigned a team. 
-
-#### Proposal (due 9/18 by end of day) 
-Provide an outline of your project direction and the names of associated team members. 
-The outline should have enough detail so that staff can determine if it meets the minimum expectations, or if it goes too far to be reasonable by the deadline. Please include a general description of a project, and list of key technologies/libraries you plan on using (e.g. React, Three.js, Svelte, TypeScript etc.). Two to four paragraphs should provide enough level of detail. Name the file proposal.md and submit a pull request by Friday, September 18th at 11:59 PM (end of day). *Only one pull request is required per team*.
-
-You will be given some class time to work on your proposal, but please plan on reserving additional time outside of class as needed. There are no other scheduled checkpoints for your project besides the final submission. 
+Stylized text: by cooltext.com
+https://cooltext.com/logo-design-burning
+https://cooltext.com/Logo-Design-Dark-Magic
 
 #### Turning in Your Project
 Submit a second PR on the final project repo to turn in your app and code. Again, only one pull request per team.
@@ -44,6 +38,38 @@ The README for your second pull request should contain:
 
 Think of 1,3, and 4 in particular in a similar vein to the design / tech achievements for A1—A4… make a case for why what you did was challenging and why your implementation deserves a grade of 100%.
 
-## FAQs
+## Lost in Transmission
 
-- **Can I use XYZ framework?** You can use any web-based frameworks or tools available, but for your server programming you need to use Node.js. Your client-side scripting language should be either JavaScript or TypeScript. While the course staff is happy to help with frameworks used in the class, we can't guarantee we'll be able to assist you with other frameworks / databases; choose carefully!
+Our project is an asymmetrical puzzle game meant to be played by two players on different machines. The web interface first allows a host player to create a lobby and designate roles ('analog' and 'digital'), and allows a guest player to join an existing lobby using a join code. After both players have their roles, they are sent to their respective views. They are instructed not to communicate outside of in-game means. 
+
+The 'analog' player sees a printer that outputs information sent to them by their teammate, and an interface to send a waveform shape and a colored light to their teammate. The 'digital' player sees a completely different interface, with a display for the analog player's waveform and colored light, and a terminal that allows them to send messages to their partner. The analog player has a grid of buttons with symbols -- their task is to communicate a series of directions to the digital player via their waveforms. The digital player can use these directions to navigate a grid graphic to find a symbol, which they can communicate to their partner. When the analog player successfully guesses the symbol, 3 times, both players are sent to a win screen! 
+
+## Additional Instructions 
+
+The game can be run on a single machine, so long as you have multiple tabs open. 
+
+## Tech Stack 
+
+We use the MERN stack -- MongoDB, Express, React, and NodeJS. All information communicated between players is stored in a MongoDB database. Express is used to manage API calls, while NodeJS directly interfaces with the MongoDB database. The frontend uses React to display responsive updating UI, and the React Router to navigate pages. 
+
+## Challenges 
+
+Even before programming began, we had design questions to navigate. We knew we wanted each player to have a unique view, and we know we wanted players communicating through limited in-game means to be a major part of the design -- we had long conversations over what means of communication each player should have, balancing difficulty, player expression, and technical burden. Ultimately, we decided the character-limited terminal and sending of waveforms finds us an exciting balance. 
+
+Technically, we struggled with making a multi-view application -- we all had difficulties learning React Router. We initially planned on having the digital player's view be built in raw HTML and CSS (not using React), but scrapped this idea due to difficulties with the React Router. React also interfered with Express in some frustrating ways. We weren't able to get GET requests to work at all, and ended up aliasing them all as POST requests. The production and display of waveforms, drawn through canvas, represented a major challenge in design and implementation. 
+
+## Contributions 
+
+All team members contributed to concept and game design. 
+
+Artemis Calia-Bogan: Styling on lobbies flow, support on digital view 
+
+Charlotte Dugaw: Database schema design, API programming, support on lobbies flow
+
+Brody Graham: Analog view design, style, and programming, lobbies flow design and programming
+
+Frank Santen: Digital view design, style, and programming 
+
+## Project Video
+
+link lol
