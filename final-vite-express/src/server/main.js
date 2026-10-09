@@ -100,7 +100,7 @@ async function run() {
             }
             })
 
-    // done, not tested
+    // done and tested
     app.patch("/lobby/assign", async (req, res) => {
         if(lobbies != null) {
             const chosen_role = req.body.chosen_role
@@ -137,8 +137,7 @@ async function run() {
                     dials: {A: 0, a: 0, B: 0, b: 0, C: 0, c: 0},
                     color: "",
                     terminal: "",
-                    last_ans: -1,
-                    correct_ans: -1, 
+                    right_guesses: 0,
                     won: false
                     }
                 try {
@@ -159,6 +158,63 @@ async function run() {
     })
 
 // analog player endpoints 
+
+    // done but untested
+    app.post("analog/refresh", async (req, res) => { 
+        if(games != null) {
+            const game = await games.findOne({game_id: {$eq: req.session.join_code}})
+            // the analog player needs the terminal and whether the game's won. 
+                const data = { 
+                    terminal: game.terminal,
+                    won: game.won
+                }
+                res.json(data)
+            }
+    })
+
+    // done and untested 
+    app.patch("analog/dials", async (req, res) => {
+        if(games != null) {
+            const values = req.body.values
+
+            const result = await games.updateOne(
+                {game_id: {$eq: req.session.join_code}}, 
+                { $set: {dials: values}}
+            )
+        }
+    })
+
+    // done but untested
+    app.patch("analog/color", async (req, res) => {
+        if(games != null) {
+            const color = req.body.color 
+
+            const result = await games.updateOne(
+                {game_id: {$eq: req.session.join_code}}, 
+                { $set: {color: color}}                
+            )
+        }
+    })
+
+    // done but untested 
+    app.patch("analog/score", async (req, res) => {
+        if(games!= null) {
+            const result = await games.updateOne(
+                {game_id: {$eq: req.session.join_code}}, 
+                { $inc: {right_guesses: 1}}
+            )      
+        }
+    })
+
+    // done but untested 
+    app.patch("analog/wipe", async (req, res) => {
+        if(games!= null) {
+            const result = await games.updateOne(
+                {game_id: {$eq: req.session.join_code}}, 
+                { $set: {right_guesses: 0}}
+            )      
+        }
+    })
 
 // digital player endpoints
 
