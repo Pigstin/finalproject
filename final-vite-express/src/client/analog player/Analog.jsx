@@ -110,10 +110,9 @@ export default function AnalogScreen() {
 
         return (
             <div style={{ width: '-moz-available', display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: 'space-around' }} >
-                <div style={lightStyle}></div>
+                <button className={style.transmitButton} onClick={() => { transmitWave() }}></button>
                 <p style={{ color: 'black' }}>TRANSMIT</p>
-                <button className={style.transmitButton} onClick={() => { transmitWave() }}>
-                </button>
+                <div style={lightStyle}></div>
             </div>
 
         )

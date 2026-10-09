@@ -26,6 +26,7 @@ import Symbol20 from "./assets/Tablet Buttons/symbol20.svg"
 export default function StoneTablet() {
     const [targetSymbol, setTargetSymbol] = useState(1)
     const [score, setScore] = useState(0)
+    const [red, setRed] = useState(false)
 
     const waveData = {
         flatline: { A: 0, a: 0, B: 0, b: 0, C: 0, c: 0 }, //flatline
@@ -83,8 +84,34 @@ export default function StoneTablet() {
                 <TabletButton src={Symbol19} symbolNumber={19} />
                 <TabletButton src={Symbol20} symbolNumber={10} />
             </div>
+            <div style={{ height: '20px' }}></div>
+            <AnswerLights />
         </div>
     </article >
+
+    function AnswerLights() {
+        const diameter = "20px"
+
+        function GetLightSyle(idx) {
+            if (red) {
+                return { boxSizing: "content-box", width: diameter, height: diameter, borderRadius: '100%', background: 'red', boxShadow: "0px 0px 10px red", border: 'solid 2px rgb(255, 113, 113)' }
+            }
+            else if (score >= idx) {
+                return { boxSizing: "content-box", width: diameter, height: diameter, borderRadius: '100%', background: 'lime', boxShadow: "0px 0px 10px lime", border: 'solid 2px rgb(113, 255, 113)' }
+            }
+            else {
+                return { boxSizing: "content-box", width: diameter, height: diameter, borderRadius: '100%', background: 'gray', border: 'inset 2px rgb(63, 63, 63)' }
+            }
+        }
+
+        return (
+            <div style={{ display: "flex", flexDirection: "row", width: '100%', justifyContent: 'center', alignItems: 'center', gap: "10px" }}>
+                <div style={GetLightSyle(1)}></div>
+                <div style={GetLightSyle(2)}></div>
+                <div style={GetLightSyle(3)}></div>
+            </div>
+        )
+    }
 
     function TabletButton({ src, symbolNumber }) {
 
@@ -97,6 +124,8 @@ export default function StoneTablet() {
             else {
                 console.log('Incorrect Guess')
                 setScore(0)
+                setRed(true)
+                setTimeout(() => setRed(false), 2000)
                 fetch('/analog/wipe', { method: 'PATCH' })
             }
 
