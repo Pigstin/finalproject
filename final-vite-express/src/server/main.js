@@ -23,8 +23,15 @@ async function run() {
     let lobbies = await client.db("webware-final").collection("lobbies")
     let games = await client.db("webware-final").collection("games")
 
+    // middleware
     app.use(express.static('public'))
 
+    // logger function 
+    // app.use((req, res, next) => {
+    //     const current = Temporal.Now.plainTimeISO().toString().substring(0,8);
+    //     console.log(`[${current}]: ${req.method} at ${req.originalUrl} from ${req.ip}`);
+    //     next()
+    // })
     // player connection endpoints 
 
     // done and tested
@@ -60,11 +67,13 @@ async function run() {
     })
 
     // done and tested
+    // how??? 
     app.patch("/lobby/join", async (req, res) => {
         if (lobbies != null) {
             const guest_name = req.body.username,
                 join_code = parseInt(req.body.join_code)
             try {
+                console.log(`guest_name: ${guest_name}, join_code:${join_code}`)
                 const result = await lobbies.updateOne(
                     { join_code: { $eq: join_code } },
                     { $set: { guest_name: guest_name, guest_role: "waiting" } }
@@ -100,8 +109,6 @@ async function run() {
         }
     })
 
-
-
     // done and tested
     app.patch("/lobby/assign", async (req, res) => {
         if (lobbies != null) {
@@ -128,11 +135,6 @@ async function run() {
 
             console.log('cookie role: ' + req.session.role)
         }
-    })
-
-    app.use((req, res, next) => {
-        console.log('url: ' + req.url)
-        next()
     })
 
     // done, not tested 
@@ -254,14 +256,17 @@ async function run() {
 
     // digital player endpoints
 
-    // done but untested
+    // done, tested
     app.post("/digital/refresh", async (req, res) => {
+        // if games is null this never responds with anything
         if (games != null) {
             const game = await games.findOne({ game_id: { $eq: req.session.join_code } })
             // the digital player needs the dials, the light color, and whether the game is won
+            // also needs the terminal to recieve (or send )
             const data = {
+                terminal: game.terminal,
                 dials: game.dials,
-                color: game.color,
+                light: game.color,
                 won: game.won
             }
             res.json(data)
@@ -269,9 +274,11 @@ async function run() {
     })
 
     // done and untested 
+    // why is this not a put request? 
     app.patch("/digital/terminal", async (req, res) => {
         if (games != null) {
             const terminal = req.body.terminal
+            console.log(req.body)
 
             const result = await games.updateOne(
                 { game_id: { $eq: req.session.join_code } },
