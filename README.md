@@ -58,13 +58,13 @@ Even before programming began, we had design questions to navigate. We knew we w
 
 Technically, we struggled with making a multi-view application -- we all had difficulties learning React Router. We initially planned on having the digital player's view be built in raw HTML and CSS (not using React), but scrapped this idea due to difficulties with the React Router. React also interfered with Express in some frustrating ways. We weren't able to get GET requests to work at all, and ended up aliasing them all as POST requests. The production and display of waveforms, drawn through canvas, represented a major challenge in design and implementation. 
 
-We also had a nightmarishly difficult time trying to deploy the application, for reasons we don't entiretly understand. Our final solution (spearheaded by Artemis and Brody) was to separate the frontend and backend into different rendered sites, respectively a static site and a web service.     
+We also had a nightmarishly difficult time trying to deploy the application, for reasons we don't entiretly understand. Our final solution (spearheaded by Artemis and Brody) was to separate the frontend and backend into differently hosted sites, respectively a static site and a web service. The end result still does not work, due to some error regarding how cookies are being stored. It will work if built from a personal machine just fine (including if built for a production environment). 
 
 ## Contributions 
 
 All team members contributed to concept and game design. 
 
-Artemis Calia-Bogan: Styling on lobbies flow, programming support on digital view, testing 
+Artemis Calia-Bogan: Styling on lobbies flow, programming support on digital view, testing and routing
 
 Charlotte Dugaw: Database schema design, API programming, support on lobbies flow
 
@@ -72,7 +72,9 @@ Brody Graham: Analog view design, style, and programming, lobbies flow design an
 
 Frank Santen: Digital view design, style, and programming 
 
-## Links 
+## [Project Video](https://youtu.be/_U6u9VByDjc)
 
-site: https://lost-in-transmission.onrender.com/ 
-video: 
+## Render Links 
+
+[Frontend](https://lost-in-transmission.onrender.com)
+[Backend](https://transmission-backend.onrender.com) (idk why you would need this but here it is)
