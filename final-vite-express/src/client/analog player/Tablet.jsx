@@ -120,14 +120,14 @@ export default function StoneTablet() {
             if (number === targetSymbol) {
                 console.log('Correct Guess!')
                 setScore(score + 1)
-                fetch(`${import.meta.env.VITE_API_LINK}/analog/score`, { method: 'PATCH' })
+                fetch(`/api/analog/score`, { method: 'PATCH' })
             }
             else {
                 console.log('Incorrect Guess')
                 setScore(0)
                 setRed(true)
                 setTimeout(() => setRed(false), 2000)
-                fetch(`${import.meta.env.VITE_API_LINK}/analog/wipe`, { method: 'PATCH' })
+                fetch(`/api/analog/wipe`, { method: 'PATCH' })
             }
 
             // Set new target symbol

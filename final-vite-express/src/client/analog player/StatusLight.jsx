@@ -33,7 +33,7 @@ export default function StatusLightSwitch({ color, setColor }) {
 
     function colorChosen(color) {
         setColor(color)
-        fetch(`${import.meta.env.VITE_API_LINK}/analog/color`, {
+        fetch(`/api/analog/color`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ color: color })

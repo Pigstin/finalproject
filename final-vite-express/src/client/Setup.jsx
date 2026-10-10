@@ -27,7 +27,7 @@ export default function SetupPage() {
             event.preventDefault()
             const name = document.querySelector("#huser").value
             console.log(name)
-            const response = await fetch(`${import.meta.env.VITE_API_LINK}/lobby/create`, {
+            const response = await fetch(`/api/lobby/create`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -59,7 +59,7 @@ export default function SetupPage() {
             event.preventDefault()
             const name = await document.querySelector("#guser").value,
                 code = await document.querySelector("#gcode").value
-            fetch(`${import.meta.env.VITE_API_LINK}/lobby/join`, {
+            fetch(`/api/lobby/join`, {
                 method: "PATCH",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -5,7 +5,7 @@ function CharlotteTestZone() {
         event.preventDefault()
         const name = document.querySelector("#username").value
         console.log(name)
-        const response = await fetch(`${import.meta.env.VITE_API_LINK}/lobby/create`, {
+        const response = await fetch(`/api/lobby/create`, {
             method: "POST", 
             headers: {"Content-Type": "application/json"},
             body : JSON.stringify({

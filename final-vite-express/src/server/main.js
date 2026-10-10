@@ -2,15 +2,22 @@ import cookieSession from "cookie-session";
 import express from "express";
 import ViteExpress from "vite-express";
 import { MongoClient } from "mongodb";
+import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 
+const corsOptions = {
+    origin: process.env.FRONTEND
+}  
+
 const app = express()
 app.use(express.json())
+app.use(cors(corsOptions))
 
 app.use(cookieSession({
     name: 'session',
-    keys: ['bark', 'woof']
+    keys: ['bark', 'woof'],
+    sameSite: 'lax'
 }))
 
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@${process.env.HOST}`
@@ -99,6 +106,7 @@ async function run() {
     // done and tested
     app.get("/lobby/refresh", async (req, res) => {
         if (lobbies != null) {
+            console.log(req.session.join_code)
             const lobby = await lobbies.findOne({ join_code: { $eq: req.session.join_code } })
             // if user is host...
             // we respond with names and roles.

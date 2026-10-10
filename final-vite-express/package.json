@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "cookie-session": "^2.1.1",
+    "cors": "^2.8.6",
     "cross-env": "^7.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.1.0",
@@ -19,8 +20,8 @@
     "react-dom": "^19.1.0",
     "react-router": "^8.4.0",
     "react-router-dom": "^7.18.4",
-    "vite-express": "*",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "vite-express": "*"
   },
   "devDependencies": {
     "@types/react": "^19.1.2",
