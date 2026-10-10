@@ -144,7 +144,7 @@ function draw(timestamp) {
 
 async function requestData() {
 
-    const response = await fetch(`/api/digital/refresh/`, {
+    const response = await fetch(`${import.meta.env.VITE_API_LINK}/digital/refresh/`, {
         method: 'GET',
         headers: { "Content-Type": "application/json" }
     })
@@ -228,7 +228,7 @@ addEventListener("keydown", (event) => {
         // lambda function who's sole purpose is to update a resource 
         // it is okay that this is here as we don't need to wait on it 
         (async () => {
-            const response = await fetch(`/api/digital/terminal/`, {
+            const response = await fetch(`${import.meta.env.VITE_API_LINK}/digital/terminal/`, {
                 method: 'PATCH',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

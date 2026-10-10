@@ -27,7 +27,7 @@ export default function AnalogScreen() {
     const refreshMsec = 3000;
     async function refresh() {
         clearTimeout(refreshTimer)
-        const data = await (await fetch(`/api/analog/refresh`, { method: 'GET' })).json()
+        const data = await (await fetch(`${import.meta.env.VITE_API_LINK}/analog/refresh`, { method: 'GET' })).json()
         console.log(data)
 
         setMesKey(mesKey + 1)
@@ -102,7 +102,7 @@ export default function AnalogScreen() {
                 values: { A: aAmp, a: aPhase, B: bAmp, b: bPhase, C: cAmp, c: cPhase }
             }
 
-            fetch(`/api/analog/dials`, {
+            fetch(`${import.meta.env.VITE_API_LINK}/analog/dials`, {
                 method: "PATCH",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
